@@ -24,7 +24,16 @@ pydantic-settings = "^2.6.1"
 psycopg2-binary = "^2.9.10"
 dependency-injector = "^4.43.0"
 python-jose = "^3.3.0"
-
+aiokafka = "^0.12.0"
+python-keycloak = "^4.7.2"
+opentelemetry-api = "^1.28.2"
+opentelemetry-sdk = "^1.28.2"
+opentelemetry-instrumentation-fastapi = "^0.49b2"
+opentelemetry-exporter-prometheus = "^0.49b2"
+opentelemetry-exporter-jaeger = "^1.21.0"
+opentelemetry-exporter-otlp = "^1.28.2"
+opentelemetry-instrumentation-aiokafka = "^0.49b2"
+httpx = "^0.28.0"
 
 
 [build-system]
