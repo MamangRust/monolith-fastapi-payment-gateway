@@ -3,6 +3,7 @@ from internal.services.email_service.service import EmailService
 from internal.lib.kafka.kafka_config import KafkaManager 
 from internal.lib.otel.otel_config import OpenTelemetryManager
 from internal.lib.config.main import get_app_settings
+from prometheus_client import start_http_server
 
 import asyncio
 
@@ -20,7 +21,14 @@ async def main():
         smtp_password=settings.smtp_password,
         otel_manager=otel_manager
     )
+
+    start_http_server(8007)  
+
     await email_service.start()
+
+
+
+
 
 if __name__ == "__main__":
     asyncio.run(main())

@@ -1,0 +1,273 @@
+version: '3.8'
+services:
+  # Zookeeper service
+  zookeeper:
+    image: bitnami/zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+
+  # Kafka service
+  kafka:
+    image: bitnami/kafka:latest
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+
+  # Prometheus service
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    environment:
+      - PROMETHEUS_CONFIG_FILE=/etc/prometheus/prometheus.yml
+    depends_on:
+      - kafka
+      - opentelemetry-collector
+
+  # Grafana service
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+      - jaeger
+
+  # OpenTelemetry Collector (otel)
+  opentelemetry-collector:
+    image: otel/opentelemetry-collector:latest
+    ports:
+      - "55680:55680"
+      - "8888:8888"
+    environment:
+      - OTEL_SERVICE_NAME=kafka-consumer
+      - OTEL_EXPORTER=prometheus
+      - OTEL_EXPORTER_PROMETHEUS_ENDPOINT=http://prometheus:9090/metrics
+    depends_on:
+      - kafka
+
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.62.0
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+
+  postgres:
+    image: postgres:17.0-alpine3.19
+    container_name: fastapi_sqlalchemy-postgres
+    environment:
+      - POSTGRES_DB=payment_gateway
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d authservice_db -U root"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  api_gateway:
+    build:
+      context: ./services/api_gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - kafka
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+  # Auth Service
+  auth_service:
+    build:
+      context: ./services/auth_service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+
+  # User Service
+  user_service:
+    build:
+      context: ./services/user_service
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+  # Saldo Service
+  saldo_service:
+    build:
+      context: ./services/saldo_service
+      dockerfile: Dockerfile
+    ports:
+      - "8003:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+  # Topup Service
+  topup_service:
+    build:
+      context: ./services/topup_service
+      dockerfile: Dockerfile
+    ports:
+      - "8004:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+  # Transfer Service
+  transfer_service:
+    build:
+      context: ./services/transfer_service
+      dockerfile: Dockerfile
+    ports:
+      - "8005:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+  # Withdraw Service
+  withdraw_service:
+    build:
+      context: ./services/withdraw_service
+      dockerfile: Dockerfile
+    ports:
+      - "8006:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+
+  email_service:
+    build:
+      context: ./services/email_service
+      dockerfile: Dockerfile
+    ports:
+      - "8007:8000"
+    depends_on:
+      - postgres
+      - kafka
+      - jaeger
+      - prometheus
+    environment:
+      - DATABASE_URL=postgresql://root:root@postgres:5432/payment_gateway
+      - DB_DRIVER=postgresql
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=payment_gateway
+      - JWT_SECRET_KEY=hello
+      - JWT_TOKEN_EXPIRATION_MINUTES=10080
+      - JWT_ALGORITHM=HS256
+      - SMTP_USER=
+      - SMTP_PASSWORD=

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List, Optional
+from prometheus_client import Counter, Histogram
 
 from internal.services.saldo_service.domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
-
 from internal.services.saldo_service.domain.dtos.response.api import ApiResponse
 from internal.services.saldo_service.domain.service.saldo import ISaldoService
 from internal.services.saldo_service.domain.dtos.response.saldo import SaldoResponse
@@ -16,18 +16,32 @@ router = APIRouter()
 
 
 
+REQUEST_COUNT = Counter('saldo_service_requests_count', 'Total number of requests received', ['method', 'endpoint', 'status'])
+REQUEST_DURATION = Histogram('saldo_service_request_duration_seconds', 'Duration of request handling', ['method', 'endpoint'])
+
 @router.get("/", response_model=ApiResponse[List[SaldoResponse]])
 async def get_saldos(
     token: str = Depends(token_security),
     saldo_service: ISaldoService = Depends(get_saldo_service),
 ):
     """Retrieve a list of all saldos."""
+    method = 'GET'
+    endpoint = '/'
     try:
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await transfer_service.get_transfers()
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=500, detail=response.message)
+            return response
+
         response = await saldo_service.get_saldos()
         if isinstance(response, ErrorResponse):
             raise HTTPException(status_code=500, detail=response.message)
         return response
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
@@ -38,12 +52,18 @@ async def get_saldo(
     token: str = Depends(token_security),
 ):
     """Retrieve a single saldo by its ID."""
+    method = 'GET'
+    endpoint = f'/{id}'
     try:
-        response = await saldo_service.get_saldo(id)
-        if isinstance(response, ErrorResponse):
-            raise HTTPException(status_code=404, detail=response.message)
-        return response
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await saldo_service.get_saldo(id)
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=404, detail=response.message)
+            return response
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
@@ -54,12 +74,18 @@ async def get_saldo_user(
     token: str = Depends(token_security),
 ):
     """Retrieve a single saldo associated with a specific user ID."""
+    method = 'GET'
+    endpoint = f'/user/{user_id}'
     try:
-        response = await saldo_service.get_saldo_user(user_id)
-        if isinstance(response, ErrorResponse):
-            raise HTTPException(status_code=404, detail=response.message)
-        return response
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await saldo_service.get_saldo_user(user_id)
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=404, detail=response.message)
+            return response
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
@@ -72,12 +98,19 @@ async def get_saldo_users(
     token: str = Depends(token_security),
 ):
     """Retrieve all saldos associated with a specific user ID."""
+    method = 'GET'
+    endpoint = f'/users/{user_id}'
     try:
-        response = await saldo_service.get_saldo_users(user_id)
-        if isinstance(response, ErrorResponse):
-            raise HTTPException(status_code=404, detail=response.message)
-        return response
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await saldo_service.get_saldo_users(user_id)
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=404, detail=response.message)
+            return response
+
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
@@ -88,12 +121,18 @@ async def create_saldo(
     token: str = Depends(token_security),
 ):
     """Create a new saldo."""
+    method = 'POST'
+    endpoint = '/'
     try:
-        response = await saldo_service.create_saldo(input)
-        if isinstance(response, ErrorResponse):
-            raise HTTPException(status_code=400, detail=response.message)
-        return response
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await saldo_service.create_saldo(input)
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=400, detail=response.message)
+            return response
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
@@ -105,13 +144,19 @@ async def update_saldo(
     token: str = Depends(token_security),
 ):
     """Update an existing saldo by its ID."""
+    method = 'PUT'
+    endpoint = f'/{id}'
     try:
         input.id = id  # Ensure the ID in the path matches the request
-        response = await saldo_service.update_saldo(input)
-        if isinstance(response, ErrorResponse):
-            raise HTTPException(status_code=400, detail=response.message)
-        return response
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await saldo_service.update_saldo(input)
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=400, detail=response.message)
+            return response
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
@@ -122,10 +167,17 @@ async def delete_saldo(
     token: str = Depends(token_security),
 ):
     """Delete a saldo by its ID."""
+    method = 'DELETE'
+    endpoint = f'/{id}'
     try:
-        response = await saldo_service.delete_saldo(id)
-        if isinstance(response, ErrorResponse):
-            raise HTTPException(status_code=404, detail=response.message)
-        return response
+        with REQUEST_DURATION.labels(method, endpoint).time():
+            response = await saldo_service.delete_saldo(id)
+            status = 'success' if not isinstance(response, ErrorResponse) else 'error'
+            REQUEST_COUNT.labels(method, endpoint, status).inc()
+            if status == 'error':
+                raise HTTPException(status_code=404, detail=response.message)
+            return response
+
     except Exception as e:
+        REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
