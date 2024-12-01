@@ -1,4 +1,4 @@
-from internal.services.auth_service.api import auth_handler
+from api import auth_handler
 from fastapi import APIRouter
 
 router = APIRouter()

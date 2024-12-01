@@ -5,10 +5,10 @@ from sqlalchemy.future import select
 from datetime import datetime
 from typing import List, Optional
 
-from internal.services.withdraw_service.domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
-from internal.services.withdraw_service.domain.dtos.record.withdraw import WithdrawRecordDTO
-from internal.services.withdraw_service.domain.repository.withdraw import IWithdrawRepository
-from internal.lib.model.withdraw import Withdraw
+from domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
+from domain.dtos.record.withdraw import WithdrawRecordDTO
+from domain.repository.withdraw import IWithdrawRepository
+from lib.model.withdraw import Withdraw
 
 class WithdrawRepository(IWithdrawRepository):
     async def find_all(self, session: AsyncSession) -> List[WithdrawRecordDTO]:

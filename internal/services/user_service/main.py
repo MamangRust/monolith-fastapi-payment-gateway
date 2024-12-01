@@ -4,9 +4,9 @@ from fastapi import FastAPI, Response
 from starlette.middleware.cors import CORSMiddleware
 from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
-from internal.services.user_service.api.routes import router as api_router
-from internal.lib.logging.logging_config import LoggerConfigurator
-from internal.lib.config.main import get_app_settings
+from api.routes import router as api_router
+from lib.logging.logging_config import LoggerConfigurator
+from lib.config.main import get_app_settings
 
 def create_app() -> FastAPI:
     settings = get_app_settings()

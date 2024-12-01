@@ -1,10 +1,10 @@
 from functools import lru_cache
 
-from internal.lib.config.app import AppSettings
-from internal.lib.config.base import AppEnvTypes, BaseAppSettings
-from internal.lib.config.production import ProdAppSettings
-from internal.lib.config.development import DevAppSettings
-from internal.lib.config.test import TestAppSettings
+from lib.config.app import AppSettings
+from lib.config.base import AppEnvTypes, BaseAppSettings
+from lib.config.production import ProdAppSettings
+from lib.config.development import DevAppSettings
+from lib.config.test import TestAppSettings
 
 AppEnvType = DevAppSettings | TestAppSettings | ProdAppSettings
 

@@ -3,9 +3,9 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from internal.services.api_gateway.routes.main import router as api_router
-from internal.lib.logging.logging_config import LoggerConfigurator
-from internal.lib.config.main import get_app_settings
+from routes.main import router as api_router
+from lib.logging.logging_config import LoggerConfigurator
+from lib.config.main import get_app_settings
 
 
 

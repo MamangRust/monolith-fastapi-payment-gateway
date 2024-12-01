@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List, Optional
 from prometheus_client import Counter, Histogram
 
-from internal.services.withdraw_service.domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
-from internal.services.withdraw_service.domain.dtos.response.api import ApiResponse
-from internal.services.withdraw_service.domain.service.withdraw import IWithdrawService
-from internal.services.withdraw_service.domain.dtos.response.withdraw import WithdrawResponse
-from internal.services.withdraw_service.infrastructure.service.withdraw import WithdrawResponse
-from internal.lib.security.header import token_security
-from internal.services.withdraw_service.infrastructure.di import get_withdraw_service
+from domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
+from domain.dtos.response.api import ApiResponse
+from domain.service.withdraw import IWithdrawService
+from domain.dtos.response.withdraw import WithdrawResponse
+from infrastructure.service.withdraw import WithdrawResponse
+from lib.security.header import token_security
+from infrastructure.di import get_withdraw_service
 
 # Prometheus metrics
 REQUEST_COUNT = Counter('withdraw_service_requests_count', 'Total number of requests received', ['method', 'endpoint', 'status'])

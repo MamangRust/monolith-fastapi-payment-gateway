@@ -1,7 +1,7 @@
 from fastapi import HTTPException, APIRouter, Depends
-from internal.lib.http.http_config import HttpClient, HttpClientError
-from internal.lib.security.header import token_security
-from internal.services.api_gateway.domain.request.transfer import CreateTransferRequest, UpdateTransferRequest
+from lib.http.http_config import HttpClient, HttpClientError
+from lib.security.header import token_security
+from domain.request.transfer import CreateTransferRequest, UpdateTransferRequest
 
 
 router = APIRouter()

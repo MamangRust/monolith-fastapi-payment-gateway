@@ -1410,6 +1410,25 @@ opentelemetry-util-http = "0.49b2"
 instruments = ["fastapi (>=0.58,<1.0)"]
 
 [[package]]
+name = "opentelemetry-instrumentation-kafka-python"
+version = "0.49b2"
+description = "OpenTelemetry Kafka-Python instrumentation"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "opentelemetry_instrumentation_kafka_python-0.49b2-py3-none-any.whl", hash = "sha256:58365b8218736c80f19a1020addece8067a07902d8b35af1d71fa57bd2351fda"},
+    {file = "opentelemetry_instrumentation_kafka_python-0.49b2.tar.gz", hash = "sha256:d115fc0721360b21ab8a6a0f8d15769ae5865ccd198d22a56ead7a9122a4e524"},
+]
+
+[package.dependencies]
+opentelemetry-api = ">=1.5,<2.0"
+opentelemetry-instrumentation = "0.49b2"
+opentelemetry-semantic-conventions = "0.49b2"
+
+[package.extras]
+instruments = ["kafka-python (>=2.0,<3.0)", "kafka-python-ng (>=2.0,<3.0)"]
+
+[[package]]
 name = "opentelemetry-proto"
 version = "1.28.2"
 description = "OpenTelemetry Python Proto"
@@ -2291,4 +2310,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "73e413f8516c07d627822a40fdfadb5cb65843111463b0984e58524390439583"
+content-hash = "efe6875adccd61ed5ac07eac34a446059a7f82711b0b80e4eda492cb56bbcfdb"

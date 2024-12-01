@@ -2,21 +2,21 @@ from typing import List, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
 
-from internal.services.topup_service.domain.repository.user import IUserRepository
+from domain.repository.user import IUserRepository
 
-from internal.services.topup_service.domain.repository.topup import ITopupRepository
-from internal.services.topup_service.domain.service.topup import ITopupService
+from domain.repository.topup import ITopupRepository
+from domain.service.topup import ITopupService
 
-from internal.services.topup_service.domain.repository.saldo import ISaldoRepository
+from domain.repository.saldo import ISaldoRepository
 
-from internal.services.topup_service.domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
-from internal.services.topup_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.topup_service.domain.dtos.response.topup import TopupResponse
+from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.topup import TopupResponse
 
-from internal.lib.utils.errors import AppError, NotFoundError
+from lib.utils.errors import AppError, NotFoundError
 
-from internal.lib.kafka.kafka_config import KafkaManager
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from lib.kafka.kafka_config import KafkaManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 import json
 

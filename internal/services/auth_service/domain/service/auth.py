@@ -1,8 +1,8 @@
 import abc
 from typing import List, Optional, Any, Union
-from internal.services.auth_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.auth_service.domain.dtos.response.user import UserResponse
-from internal.services.auth_service.domain.dtos.request.auth import RegisterRequest, LoginRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.user import UserResponse
+from domain.dtos.request.auth import RegisterRequest, LoginRequest
 
 
 class IAuthService(abc.ABC):

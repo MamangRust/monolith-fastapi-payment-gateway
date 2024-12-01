@@ -34,6 +34,7 @@ opentelemetry-exporter-jaeger = "^1.21.0"
 opentelemetry-exporter-otlp = "^1.28.2"
 opentelemetry-instrumentation-aiokafka = "^0.49b2"
 httpx = "^0.28.0"
+opentelemetry-instrumentation-kafka-python = "^0.49b2"
 
 
 [build-system]

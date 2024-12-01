@@ -3,7 +3,7 @@ from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExport
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor, BatchSpanProcessor
 from opentelemetry.sdk.resources import Resource
-from opentelemetry.instrumentation.kafka import KafkaInstrumentor
+from opentelemetry.instrumentation.aiokafka import AIOKafkaInstrumentor
 
 
 class OpenTelemetryManager:

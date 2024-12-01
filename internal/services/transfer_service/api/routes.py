@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from internal.services.tranfer_service.api import transfer_handler
+from api import transfer_handler
 
 router = APIRouter()
 

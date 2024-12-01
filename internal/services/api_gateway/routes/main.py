@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from internal.services.api_gateway.routes import auth_routes,  saldo_routes, topup_routes, transfer_routes, withdraw_routes
+from routes import auth_routes,  saldo_routes, topup_routes, transfer_routes, withdraw_routes
 
 router = APIRouter()
 

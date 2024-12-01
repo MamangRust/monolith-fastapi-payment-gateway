@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from internal.services.topup_service.api import topup_handler
+from api import topup_handler
 
 router = APIRouter()
 

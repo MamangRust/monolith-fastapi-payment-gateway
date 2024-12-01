@@ -1,17 +1,17 @@
 from typing import List, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
-from internal.services.saldo_service.domain.repository.user import IUserRepository
-from internal.services.saldo_service.domain.repository.saldo import ISaldoRepository
-from internal.services.saldo_service.domain.service.saldo import ISaldoService
-from internal.services.saldo_service.domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
-from internal.services.saldo_service.domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.repository.user import IUserRepository
+from domain.repository.saldo import ISaldoRepository
+from domain.service.saldo import ISaldoService
+from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
 
-from internal.lib.utils.errors import AppError, NotFoundError
+from lib.utils.errors import AppError, NotFoundError
 
-from internal.services.saldo_service.domain.dtos.response.saldo import SaldoResponse
-from internal.lib.kafka.kafka_config import KafkaManager
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from domain.dtos.response.saldo import SaldoResponse
+from lib.kafka.kafka_config import KafkaManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 import json
 

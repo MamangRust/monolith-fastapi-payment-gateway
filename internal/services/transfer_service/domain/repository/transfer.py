@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional, Any
-from internal.services.tranfer_service.domain.dtos.record.transfer import TransferRecordDTO
-from internal.services.tranfer_service.domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest, UpdateTransferAmountRequest
+from domain.dtos.record.transfer import TransferRecordDTO
+from domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest, UpdateTransferAmountRequest
 
 
 

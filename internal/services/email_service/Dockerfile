@@ -12,20 +12,19 @@ RUN apt-get update && apt-get install -y \
 
 # Copy the requirements file
 COPY services/email_service/requirements.txt requirements.txt
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the service source code
-COPY services/email_service/ .
+# Copy lib ke dalam container
+COPY lib /app/lib
 
-# Copy the shared libraries
-COPY libs/ /app/libs
+# Copy seluruh email_service service
+COPY services/email_service /app
 
-# Set environment variables (optional)
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
+
+EXPOSE 8008
 
 # Command to run the application
 CMD ["python", "main.py"]

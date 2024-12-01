@@ -1,16 +1,16 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List, Optional
+from prometheus_client import Counter, Histogram
 
-from internal.services.topup_service.domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
+from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
 
-from internal.services.topup_service.domain.dtos.response.api import ApiResponse
-from internal.services.topup_service.domain.service.topup import ITopupService
-from internal.services.topup_service.domain.dtos.response.topup import TopupResponse
+from domain.dtos.response.api import ApiResponse
+from domain.service.topup import ITopupService
+from domain.dtos.response.topup import TopupResponse
+from infrastructure.service.topup import TopupService
 
-from internal.services.topup_service.infrastructure.service.topup import TopupService
-
-from internal.lib.security.header import token_security
-from internal.services.topup_service.infrastructure.di import get_topup_service
+from lib.security.header import token_security
+from infrastructure.di import get_topup_service
 
 
 router = APIRouter()

@@ -1,8 +1,8 @@
 import abc
 from typing import List, Optional, Any, Union, List
-from internal.services.user_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.user_service.domain.dtos.response.user import UserResponse
-from internal.services.user_service.domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.user import UserResponse
+from domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
 
 class IUserService(abc.ABC):
     """

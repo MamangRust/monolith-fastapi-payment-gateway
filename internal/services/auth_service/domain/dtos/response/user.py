@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-from internal.services.auth_service.domain.dtos.record.user import UserRecordDTO
+from domain.dtos.record.user import UserRecordDTO
 
 
 class UserResponse(BaseModel):

@@ -5,18 +5,18 @@ from sqlalchemy.future import select
 from datetime import datetime
 from typing import List, Optional
 
-from internal.services.tranfer_service.domain.dtos.request.transfer import (
+from domain.dtos.request.transfer import (
     CreateTransferRequest,
     UpdateTransferRequest,
     UpdateTransferAmountRequest,
 )
-from internal.services.tranfer_service.domain.dtos.record.transfer import (
+from domain.dtos.record.transfer import (
     TransferRecordDTO,
 )
-from internal.services.tranfer_service.domain.repository.transfer import (
+from domain.repository.transfer import (
     ITransferRepository,
 )
-from internal.lib.model.transfer import Transfer
+from lib.model.transfer import Transfer
 
 
 class TransferRepository(ITransferRepository):

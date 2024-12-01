@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional, Any
-from internal.services.withdraw_service.domain.dtos.record.withdraw import WithdrawRecordDTO
-from internal.services.withdraw_service.domain.dtos.request.withdraw import (
+from domain.dtos.record.withdraw import WithdrawRecordDTO
+from domain.dtos.request.withdraw import (
     CreateWithdrawRequest,
     UpdateWithdrawRequest,
 )

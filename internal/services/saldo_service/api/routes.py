@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from internal.services.saldo_service.api import saldo_handler
+from api import saldo_handler
 
 router = APIRouter()
 

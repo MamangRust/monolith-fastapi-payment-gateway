@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-from internal.services.saldo_service.domain.dtos.record.saldo import SaldoRecordDTO
+from domain.dtos.record.saldo import SaldoRecordDTO
 
 class SaldoResponse(BaseModel):
     saldo_id: int

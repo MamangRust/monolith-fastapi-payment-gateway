@@ -1,0 +1,60 @@
+global:
+  scrape_interval:     10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: 'otel-collector'
+    static_configs:
+      - targets: ['opentelemetry-collector:8888']
+  - job_name: 'kafka'
+    static_configs:
+      - targets: ['kafka:9092'] 
+  - job_name: 'auth-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['auth-service:8001']
+        labels:
+          application: 'Auth Service Application'
+
+  - job_name: 'saldo-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['saldo-service:8002']
+        labels:
+          application: 'Saldo Service Application'
+
+  - job_name: 'topup-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['topup-service:8003']
+        labels:
+          application: 'Topup Service Application'
+
+  - job_name: 'transfer-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['transfer-service:8004']
+        labels:
+          application: 'Transfer Service Application'
+
+  - job_name: 'user-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['user-service:8005']
+        labels:
+          application: 'Transfer Service Application'
+  
+
+  - job_name: 'withdraw-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['withdraw-service:8006']
+        labels:
+          application: 'Withdraw Service Application'
+
+  - job_name: 'email-service'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['email-service:8007']
+        labels:
+          application: 'Email Service Application'

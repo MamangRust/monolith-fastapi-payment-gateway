@@ -1,4 +1,4 @@
-from internal.services.user_service.api import user_handler
+from api import user_handler
 from fastapi import APIRouter
 
 router = APIRouter()

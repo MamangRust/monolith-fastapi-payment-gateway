@@ -3,22 +3,22 @@ from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from internal.lib.config.main import get_app_settings
+from lib.config.main import get_app_settings
 
-from internal.lib.config.base import BaseAppSettings
-
-
-from internal.services.user_service.domain.repository.user import IUserRepository
-from internal.services.user_service.domain.service.user import IUserService
-
-from internal.services.user_service.infrastructure.service.user import UserService
+from lib.config.base import BaseAppSettings
 
 
-from internal.lib.security.jwt import JwtConfig
-from internal.lib.security.hash_password import Hashing
+from domain.repository.user import IUserRepository
+from domain.service.user import IUserService
 
-from internal.lib.kafka.kafka_config import KafkaManager
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from infrastructure.service.user import UserService
+
+
+from lib.security.jwt import JwtConfig
+from lib.security.hash_password import Hashing
+
+from lib.kafka.kafka_config import KafkaManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 
 

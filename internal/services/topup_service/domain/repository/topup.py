@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional, Any
-from internal.services.topup_service.domain.dtos.record.topup import TopupRecordDTO
-from internal.services.topup_service.domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest, UpdateTopupAmount
+from domain.dtos.record.topup import TopupRecordDTO
+from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest, UpdateTopupAmount
 
 
 class ITopupRepository(abc.ABC):

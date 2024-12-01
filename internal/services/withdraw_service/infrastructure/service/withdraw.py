@@ -2,33 +2,33 @@ from typing import List, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
 
-from internal.services.withdraw_service.domain.repository.user import IUserRepository
+from domain.repository.user import IUserRepository
 
-from internal.services.withdraw_service.domain.repository.withdraw import (
+from domain.repository.withdraw import (
     IWithdrawRepository,
 )
-from internal.services.withdraw_service.domain.service.withdraw import IWithdrawService
+from domain.service.withdraw import IWithdrawService
 
-from internal.services.withdraw_service.domain.repository.saldo import ISaldoRepository
+from domain.repository.saldo import ISaldoRepository
 
 
-from internal.services.withdraw_service.domain.dtos.request.withdraw import (
+from domain.dtos.request.withdraw import (
     CreateWithdrawRequest,
     UpdateWithdrawRequest,
 )
 
-from internal.services.withdraw_service.domain.dtos.response.api import (
+from domain.dtos.response.api import (
     ApiResponse,
     ErrorResponse,
 )
-from internal.lib.utils.errors import AppError, NotFoundError, ValidationError
+from lib.utils.errors import AppError, NotFoundError, ValidationError
 
-from internal.services.withdraw_service.domain.dtos.response.withdraw import (
+from domain.dtos.response.withdraw import (
     WithdrawResponse,
 )
 
-from internal.lib.kafka.kafka_config import KafkaManager
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from lib.kafka.kafka_config import KafkaManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 
 logger = get_logger()

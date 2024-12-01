@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List, Optional
 from prometheus_client import Counter, Histogram
 
-from internal.services.tranfer_service.domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest
-from internal.services.tranfer_service.domain.dtos.response.api import ApiResponse
-from internal.services.tranfer_service.domain.service.transfer import ITransferService
-from internal.services.tranfer_service.domain.dtos.response.transfer import TransferResponse
-from internal.services.tranfer_service.infrastructure.service.transfer import TransferService
-from internal.lib.security.header import token_security
-from internal.services.tranfer_service.infrastructure.di import get_transfer_service
+from domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest
+from domain.dtos.response.api import ApiResponse
+from domain.service.transfer import ITransferService
+from domain.dtos.response.transfer import TransferResponse
+from infrastructure.service.transfer import TransferService
+from lib.security.header import token_security
+from infrastructure.di import get_transfer_service
 
 # Prometheus metrics for transfer service
 REQUEST_COUNT = Counter('transfer_service_requests_count', 'Total number of requests received', ['method', 'endpoint', 'status'])

@@ -1,7 +1,7 @@
 from jose import jwt
 from datetime import datetime, timedelta, timezone
 from typing import Optional
-from internal.lib.utils.errors import TokenGenerationError, TokenExpiredError, TokenValidationError
+from lib.utils.errors import TokenGenerationError, TokenExpiredError, TokenValidationError
 from pydantic import BaseModel
 from typing import Optional
 

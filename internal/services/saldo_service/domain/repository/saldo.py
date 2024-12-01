@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional, Any
-from internal.services.saldo_service.domain.dtos.record.saldo import SaldoRecordDTO
-from internal.services.saldo_service.domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoBalanceRequest, UpdateSaldoRequest
+from domain.dtos.record.saldo import SaldoRecordDTO
+from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoBalanceRequest, UpdateSaldoRequest
 
 
 class ISaldoRepository(abc.ABC):

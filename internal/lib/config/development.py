@@ -2,7 +2,7 @@ import logging
 
 from pydantic import computed_field
 
-from internal.lib.config.app import AppSettings
+from lib.config.app import AppSettings
 
 
 class DevAppSettings(AppSettings):

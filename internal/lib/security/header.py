@@ -1,4 +1,4 @@
-from internal.lib.security.token import HTTPTokenHeader
+from lib.security.token import HTTPTokenHeader
 
 
 token_security = HTTPTokenHeader(

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 from datetime import datetime
-from internal.services.tranfer_service.domain.dtos.record.transfer import TransferRecordDTO
+from domain.dtos.record.transfer import TransferRecordDTO
 
 class TransferResponse(BaseModel):
     transfer_id: int

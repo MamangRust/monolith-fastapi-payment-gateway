@@ -12,15 +12,13 @@ RUN apt-get update && apt-get install -y \
 
 # Copy the requirements file
 COPY services/withdraw_service/requirements.txt requirements.txt
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the service source code
-COPY services/withdraw_service/ .
+# Copy lib ke dalam container
+COPY lib /app/lib
 
-# Copy the shared libraries
-COPY libs/ /app/libs
+# Copy seluruh withdraw_service service
+COPY services/withdraw_service /app
 
 # Set environment variables (optional)
 ENV PYTHONUNBUFFERED=1

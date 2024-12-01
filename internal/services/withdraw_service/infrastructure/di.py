@@ -3,29 +3,29 @@ from collections.abc import AsyncIterator
 
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from internal.lib.config.main import get_app_settings
+from lib.config.main import get_app_settings
 
-from internal.lib.config.base import BaseAppSettings
-
-
-from internal.services.withdraw_service.domain.repository.user import IUserRepository
-from internal.services.withdraw_service.infrastructure.repository.user import UserRepository
+from lib.config.base import BaseAppSettings
 
 
-from internal.services.withdraw_service.domain.repository.saldo import ISaldoRepository
-from internal.services.withdraw_service.infrastructure.repository.saldo import SaldoRepository
+from domain.repository.user import IUserRepository
+from infrastructure.repository.user import UserRepository
 
-from internal.services.withdraw_service.domain.repository.withdraw import IWithdrawRepository
-from internal.services.withdraw_service.infrastructure.repository.withdraw import WithdrawRepository
 
-from internal.services.withdraw_service.domain.service.withdraw import IWithdrawService
-from internal.services.withdraw_service.infrastructure.service.withdraw import WithdrawService
+from domain.repository.saldo import ISaldoRepository
+from infrastructure.repository.saldo import SaldoRepository
 
-from internal.lib.security.jwt import JwtConfig
-from internal.lib.security.hash_password import Hashing
+from domain.repository.withdraw import IWithdrawRepository
+from infrastructure.repository.withdraw import WithdrawRepository
 
-from internal.lib.kafka.kafka_config import KafkaManager
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from domain.service.withdraw import IWithdrawService
+from infrastructure.service.withdraw import WithdrawService
+
+from lib.security.jwt import JwtConfig
+from lib.security.hash_password import Hashing
+
+from lib.kafka.kafka_config import KafkaManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 
 class Container:

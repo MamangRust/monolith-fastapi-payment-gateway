@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List
 from prometheus_client import Counter, Histogram
-from internal.services.user_service.domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
-from internal.services.user_service.domain.dtos.response.api import ApiResponse
-from internal.services.user_service.domain.service.user import IUserService
-from internal.services.user_service.domain.dtos.response.user import UserResponse
-from internal.services.user_service.infrastructure.service.user import UserService
-from internal.lib.security.header import token_security
-from internal.services.user_service.infrastructure.di import get_user_service
+from domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
+from domain.dtos.response.api import ApiResponse
+from domain.service.user import IUserService
+from domain.dtos.response.user import UserResponse
+from infrastructure.service.user import UserService
+from lib.security.header import token_security
+from infrastructure.di import get_user_service
 
 # Prometheus metrics for user service
 REQUEST_COUNT = Counter('user_service_requests_count', 'Total number of requests received', ['method', 'endpoint', 'status'])

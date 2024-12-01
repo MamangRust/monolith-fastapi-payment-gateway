@@ -1,8 +1,8 @@
 import abc
 from typing import List, Optional, Any, Union
-from internal.services.topup_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.topup_service.domain.dtos.response.topup import TopupResponse
-from internal.services.topup_service.domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.topup import TopupResponse
+from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
 
 
 class ITopupService(abc.ABC):

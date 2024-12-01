@@ -83,8 +83,8 @@ services:
 
   api_gateway:
     build:
-      context: ./services/api_gateway
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/api_gateway/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
@@ -103,10 +103,10 @@ services:
       - JWT_ALGORITHM=HS256
 
   # Auth Service
-  auth_service:
+  auth-service:
     build:
-      context: ./services/auth_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/auth_service/Dockerfile
     ports:
       - "8001:8000"
     depends_on:
@@ -127,11 +127,13 @@ services:
       - JWT_ALGORITHM=HS256
 
 
-  # User Service
-  user_service:
+  
+
+  # Saldo Service
+  saldo-service:
     build:
-      context: ./services/user_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/saldo_service/Dockerfile
     ports:
       - "8002:8000"
     depends_on:
@@ -151,11 +153,11 @@ services:
       - JWT_TOKEN_EXPIRATION_MINUTES=10080
       - JWT_ALGORITHM=HS256
 
-  # Saldo Service
-  saldo_service:
+  # Topup Service
+  topup-service:
     build:
-      context: ./services/saldo_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/topup_service/Dockerfile
     ports:
       - "8003:8000"
     depends_on:
@@ -175,11 +177,11 @@ services:
       - JWT_TOKEN_EXPIRATION_MINUTES=10080
       - JWT_ALGORITHM=HS256
 
-  # Topup Service
-  topup_service:
+  # Transfer Service
+  transfer-service:
     build:
-      context: ./services/topup_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/transfer_service/Dockerfile
     ports:
       - "8004:8000"
     depends_on:
@@ -199,11 +201,11 @@ services:
       - JWT_TOKEN_EXPIRATION_MINUTES=10080
       - JWT_ALGORITHM=HS256
 
-  # Transfer Service
-  transfer_service:
+  # User Service
+  user-service:
     build:
-      context: ./services/transfer_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/user_service/Dockerfile
     ports:
       - "8005:8000"
     depends_on:
@@ -224,10 +226,10 @@ services:
       - JWT_ALGORITHM=HS256
 
   # Withdraw Service
-  withdraw_service:
+  withdraw-service:
     build:
-      context: ./services/withdraw_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/withdraw_service/Dockerfile
     ports:
       - "8006:8000"
     depends_on:
@@ -247,12 +249,12 @@ services:
       - JWT_TOKEN_EXPIRATION_MINUTES=10080
       - JWT_ALGORITHM=HS256
 
-  email_service:
+  email-service:
     build:
-      context: ./services/email_service
-      dockerfile: Dockerfile
+      context: .  
+      dockerfile: services/email_service/Dockerfile
     ports:
-      - "8007:8000"
+      - "8008:8000"
     depends_on:
       - postgres
       - kafka
@@ -271,3 +273,5 @@ services:
       - JWT_ALGORITHM=HS256
       - SMTP_USER=
       - SMTP_PASSWORD=
+
+  

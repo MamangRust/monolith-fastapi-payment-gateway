@@ -1,6 +1,6 @@
 import bcrypt
 from typing import Union
-from internal.lib.utils.errors import BcryptError, HashingError
+from lib.utils.errors import BcryptError, HashingError
 
 
 class Hashing:

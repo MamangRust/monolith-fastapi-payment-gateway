@@ -3,11 +3,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 from typing import List, Optional
 
-from internal.services.auth_service.domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
-from internal.services.auth_service.domain.dtos.record.user import UserRecordDTO
-from internal.services.auth_service.domain.repository.user import IUserRepository
+from domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
+from domain.dtos.record.user import UserRecordDTO
+from domain.repository.user import IUserRepository
 
-from internal.lib.model.user import User
+from lib.model.user import User
 
 
 class UserRepository(IUserRepository):

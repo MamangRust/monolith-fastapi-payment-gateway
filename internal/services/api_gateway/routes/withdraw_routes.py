@@ -1,13 +1,13 @@
 from fastapi import HTTPException, APIRouter, Depends
-from internal.lib.http.http_config import HttpClient, HttpClientError
-from internal.lib.security.header import token_security
+from lib.http.http_config import HttpClient, HttpClientError
+from lib.security.header import token_security
 
-from internal.services.api_gateway.domain.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
+from domain.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
 
 
 router = APIRouter()
 
-withdraw_client = HttpClient(base_url="http://withdraw-service:8004")
+withdraw_client = HttpClient(base_url="http://withdraw-service:8006")
 
 
 @router.get("/")

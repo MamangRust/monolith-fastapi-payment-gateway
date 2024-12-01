@@ -2,7 +2,7 @@ import logging
 
 from typing import Any
 
-from internal.lib.config.base import BaseAppSettings
+from lib.config.base import BaseAppSettings
 
 
 class AppSettings(BaseAppSettings):

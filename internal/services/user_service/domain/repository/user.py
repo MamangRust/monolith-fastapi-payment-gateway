@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional, Any
-from internal.services.user_service.domain.dtos.record.user import UserRecordDTO
-from internal.services.user_service.domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
+from domain.dtos.record.user import UserRecordDTO
+from domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
 
 class IUserRepository(abc.ABC):
     """

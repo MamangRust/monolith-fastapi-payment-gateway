@@ -2,7 +2,7 @@ import logging
 import structlog
 
 from structlog.typing import EventDict, Processor
-from internal.lib.config.main import get_app_settings
+from lib.config.main import get_app_settings
 
 class LoggerConfigurator:
     def __init__(self, logger_name: str = "payment-gateway-api"):

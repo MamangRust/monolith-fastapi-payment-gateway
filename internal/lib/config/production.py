@@ -1,4 +1,4 @@
-from internal.lib.config.app import AppSettings
+from lib.config.app import AppSettings
 
 class ProdAppSettings(AppSettings):
     class Config(AppSettings.Config):

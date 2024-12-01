@@ -6,10 +6,10 @@ from datetime import datetime
 
 from typing import List, Optional
 
-from internal.services.topup_service.domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest, UpdateTopupAmount
-from internal.services.topup_service.domain.dtos.record.topup import TopupRecordDTO
-from internal.services.topup_service.domain.repository.topup import ITopupRepository
-from internal.lib.model.topup import Topup
+from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest, UpdateTopupAmount
+from domain.dtos.record.topup import TopupRecordDTO
+from domain.repository.topup import ITopupRepository
+from lib.model.topup import Topup
 
 
 class TopupRepository(ITopupRepository):

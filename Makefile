@@ -7,7 +7,7 @@ AUTH_SERVICE=internal/services/auth_service/main.py
 EMAIL_SERVICE=internal/services/email_service/main.py
 SALDO_SERVICE=internal/services/saldo_service/main.py
 TOPUP_SERVICE=internal/services/topup_service/main.py
-TRANSFER_SERVICE=internal/services/tranfer_service/main.py
+TRANSFER_SERVICE=internal/services/transfer_service/main.py
 USER_SERVICE=internal/services/user_service/main.py
 WITHDRAW_SERVICE=internal/services/withdraw_service/main.py
 

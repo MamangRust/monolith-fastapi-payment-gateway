@@ -1,6 +1,6 @@
 from fastapi import HTTPException, APIRouter, Depends
-from internal.lib.http.http_config import HttpClient, HttpClientError
-from internal.services.api_gateway.domain.request.auth import RegisterRequest, LoginRequest
+from lib.http.http_config import HttpClient, HttpClientError
+from domain.request.auth import RegisterRequest, LoginRequest
 
 
 router = APIRouter()

@@ -2,24 +2,24 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
 from typing import Union, List
 
-from internal.services.user_service.domain.repository.user import IUserRepository
-from internal.services.user_service.domain.service.user import IUserService
+from domain.repository.user import IUserRepository
+from domain.service.user import IUserService
 
-from internal.lib.security.hash_password import Hashing
+from lib.security.hash_password import Hashing
 
-from internal.services.user_service.domain.dtos.request.user import (
+from domain.dtos.request.user import (
     CreateUserRequest,
     UpdateUserRequest,
 )
-from internal.services.user_service.domain.dtos.response.api import (
+from domain.dtos.response.api import (
     ApiResponse,
     ErrorResponse,
 )
-from internal.lib.utils.errors import AppError
-from internal.services.user_service.domain.dtos.response.user import UserResponse
+from lib.utils.errors import AppError
+from domain.dtos.response.user import UserResponse
 
 
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 logger = get_logger()
 
@@ -28,7 +28,6 @@ class UserService(IUserService):
         self,
         repository: IUserRepository,
         hashing: Hashing,
-        kafka_manager: KafkaManager,
         otel_manager: OpenTelemetryManager,
     ) -> None:
         self.repository = repository

@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from internal.services.withdraw_service.api import withdraw_handler
+from api import withdraw_handler
 
 router = APIRouter()
 

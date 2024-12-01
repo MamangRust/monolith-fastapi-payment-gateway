@@ -3,32 +3,32 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
 
 
-from internal.services.tranfer_service.domain.repository.user import IUserRepository
+from domain.repository.user import IUserRepository
 
-from internal.services.tranfer_service.domain.repository.transfer import (
+from domain.repository.transfer import (
     ITransferRepository,
 )
-from internal.services.tranfer_service.domain.service.transfer import ITransferService
+from domain.service.transfer import ITransferService
 
-from internal.services.tranfer_service.domain.repository.saldo import ISaldoRepository
+from domain.repository.saldo import ISaldoRepository
 
 
-from internal.services.tranfer_service.domain.dtos.request.transfer import (
+from domain.dtos.request.transfer import (
     CreateTransferRequest,
     UpdateTransferRequest,
     UpdateTransferAmountRequest,
 )
 
-from internal.services.tranfer_service.domain.dtos.response.api import (
+from domain.dtos.response.api import (
     ApiResponse,
     ErrorResponse,
 )
-from internal.lib.utils.errors import AppError, NotFoundError, ValidationError
-from internal.services.tranfer_service.domain.dtos.response.transfer import (
+from lib.utils.errors import AppError, NotFoundError, ValidationError
+from domain.dtos.response.transfer import (
     TransferResponse,
 )
-from internal.lib.kafka.kafka_config import KafkaManager
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from lib.kafka.kafka_config import KafkaManager
+from lib.otel.otel_config import OpenTelemetryManager
 
 
 logger = get_logger()

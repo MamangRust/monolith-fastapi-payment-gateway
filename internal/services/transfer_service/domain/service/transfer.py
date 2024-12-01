@@ -1,8 +1,8 @@
 import abc
 from typing import List, Optional, Any, Union
-from internal.services.tranfer_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.tranfer_service.domain.dtos.response.transfer import TransferResponse
-from internal.services.tranfer_service.domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.transfer import TransferResponse
+from domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest
 
 
 

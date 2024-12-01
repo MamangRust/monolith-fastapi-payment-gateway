@@ -2,15 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List, Optional
 from prometheus_client import Counter, Histogram
 
-from internal.services.saldo_service.domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
-from internal.services.saldo_service.domain.dtos.response.api import ApiResponse
-from internal.services.saldo_service.domain.service.saldo import ISaldoService
-from internal.services.saldo_service.domain.dtos.response.saldo import SaldoResponse
+from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
+from domain.dtos.response.api import ApiResponse
+from domain.service.saldo import ISaldoService
+from domain.dtos.response.saldo import SaldoResponse
 
-from internal.services.saldo_service.infrastructure.service.saldo import SaldoService
+from infrastructure.service.saldo import SaldoService
 
-from internal.lib.security.header import token_security
-from internal.services.saldo_service.infrastructure.di import get_saldo_service
+from lib.security.header import token_security
+from infrastructure.di import get_saldo_service
 
 router = APIRouter()
 

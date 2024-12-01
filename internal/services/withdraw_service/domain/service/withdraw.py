@@ -1,8 +1,8 @@
 import abc
 from typing import List, Optional, Any, Union
-from internal.services.withdraw_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.withdraw_service.domain.dtos.response.withdraw import WithdrawResponse
-from internal.services.withdraw_service.domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.withdraw import WithdrawResponse
+from domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
 
 
 class IWithdrawService(abc.ABC):

@@ -1,8 +1,8 @@
 import abc
 from typing import List, Optional, Any, Union
-from internal.services.saldo_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.saldo_service.domain.dtos.response.saldo import SaldoResponse
-from internal.services.saldo_service.domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.saldo import SaldoResponse
+from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
 
 
 class ISaldoService(abc.ABC):

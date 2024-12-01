@@ -1,6 +1,6 @@
 import abc
 from typing import List, Optional, Any
-from internal.services.withdraw_service.domain.dtos.record.user import UserRecordDTO
+from domain.dtos.record.user import UserRecordDTO
 
 
 class IUserRepository(abc.ABC):

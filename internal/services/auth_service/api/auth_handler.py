@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Union
-from internal.services.auth_service.domain.dtos.request.auth import RegisterRequest, LoginRequest
-from internal.services.auth_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.auth_service.domain.dtos.response.user import UserResponse
-from internal.services.auth_service.infrastructure.service.auth import AuthService
+from domain.dtos.request.auth import RegisterRequest, LoginRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.user import UserResponse
+from infrastructure.service.auth import AuthService
 
-from internal.services.auth_service.infrastructure.di import get_auth_service
+from infrastructure.di import get_auth_service
 from prometheus_client import Counter, Summary
 
 router = APIRouter()

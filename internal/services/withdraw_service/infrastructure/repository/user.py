@@ -4,9 +4,9 @@ from datetime import datetime
 from typing import List, Optional
 
 
-from internal.services.withdraw_service.domain.dtos.record.user import UserRecordDTO
-from internal.services.withdraw_service.domain.repository.user import IUserRepository
-from internal.lib.model.user import User
+from domain.dtos.record.user import UserRecordDTO
+from domain.repository.user import IUserRepository
+from lib.model.user import User
 
 
 class UserRepository(IUserRepository):

@@ -4,14 +4,14 @@ from sqlalchemy.orm import selectinload
 
 from typing import List, Optional
 
-from internal.services.tranfer_service.domain.dtos.request.saldo import (
+from domain.dtos.request.saldo import (
     CreateSaldoRequest,
     UpdateSaldoBalanceRequest,
 )
-from internal.services.tranfer_service.domain.dtos.record.saldo import SaldoRecordDTO
-from internal.services.tranfer_service.domain.repository.saldo import ISaldoRepository
+from domain.dtos.record.saldo import SaldoRecordDTO
+from domain.repository.saldo import ISaldoRepository
 
-from internal.lib.model.saldo import Saldo
+from lib.model.saldo import Saldo
 from datetime import datetime
 
 

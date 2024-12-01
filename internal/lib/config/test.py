@@ -4,7 +4,7 @@ from pydantic import computed_field
 from sqlalchemy import NullPool
 
 
-from internal.lib.config.app import AppSettings
+from lib.config.app import AppSettings
 
 class TestAppSettings(AppSettings):
     debug: bool =True

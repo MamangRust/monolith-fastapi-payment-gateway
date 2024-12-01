@@ -2,19 +2,19 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
 from typing import Union
 
-from internal.services.auth_service.domain.repository.user import IUserRepository
-from internal.services.auth_service.domain.service.auth import IAuthService
+from domain.repository.user import IUserRepository
+from domain.service.auth import IAuthService
 
-from internal.lib.security.hash_password import Hashing
-from internal.lib.security.jwt import JwtConfig
+from lib.security.hash_password import Hashing
+from lib.security.jwt import JwtConfig
 
-from internal.services.auth_service.domain.dtos.request.auth import RegisterRequest, LoginRequest
-from internal.services.auth_service.domain.dtos.request.user import CreateUserRequest
-from internal.services.auth_service.domain.dtos.response.api import ApiResponse, ErrorResponse
-from internal.services.auth_service.domain.dtos.response.user import UserResponse
-from internal.lib.utils.random_vcc import random_vcc
-from internal.lib.utils.errors import InvalidCredentialsError
-from internal.lib.otel.otel_config import OpenTelemetryManager
+from domain.dtos.request.auth import RegisterRequest, LoginRequest
+from domain.dtos.request.user import CreateUserRequest
+from domain.dtos.response.api import ApiResponse, ErrorResponse
+from domain.dtos.response.user import UserResponse
+from lib.utils.random_vcc import random_vcc
+from lib.utils.errors import InvalidCredentialsError
+from lib.otel.otel_config import OpenTelemetryManager
 
 logger = get_logger()
 
