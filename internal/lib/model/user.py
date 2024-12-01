@@ -1,12 +1,9 @@
 from sqlalchemy import (
     create_engine, Column, Integer, String, ForeignKey, Text, Sequence, TIMESTAMP, func
 )
-
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-
-Base = declarative_base()
-
+from .base import Base
 
 
 class User(Base):

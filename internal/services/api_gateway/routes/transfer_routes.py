@@ -6,7 +6,7 @@ from domain.request.transfer import CreateTransferRequest, UpdateTransferRequest
 
 router = APIRouter()
 
-transfer_client = HttpClient(base_url="http://transfer-service:8004")
+transfer_client = HttpClient(base_url="http://transfer-service:8004/api")
 
 
 @router.get("/")
@@ -84,7 +84,7 @@ async def create_transfer(
     headers = await get_auth_headers(token)
     try:
         response = await transfer_client.post(
-            "/transfer", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            "/transfer", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:
@@ -102,7 +102,7 @@ async def update_transfer(
 ):
     try:
         response = await transfer_client.put(
-            f"/transfer/{id}", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            f"/transfer/{id}", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:

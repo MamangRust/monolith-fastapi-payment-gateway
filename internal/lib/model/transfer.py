@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-Base = declarative_base()
+from .base import Base
 
 
 class Transfer(Base):

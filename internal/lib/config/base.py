@@ -2,8 +2,9 @@ from pydantic import Extra, computed_field
 from pydantic_settings import BaseSettings
 from sqlalchemy import URL
 
+
 class AppEnvTypes:
-    production : str = "prod"
+    production: str = "prod"
     development: str = "dev"
     testing: str = "test"
 
@@ -23,16 +24,12 @@ class BaseAppSettings(BaseSettings):
 
     smtp_user: str
     smtp_password: str
-    
-
-
-
 
     class Config:
         env_file = ".env"
         extra = Extra.ignore
 
-    @computed_field 
+    @computed_field
     @property
     def sql_db_uri(self) -> URL:
         return URL.create(
@@ -44,7 +41,7 @@ class BaseAppSettings(BaseSettings):
             database=self.postgres_db,
         )
 
-    @computed_field  
+    @computed_field
     @property
     def sqlalchemy_engine_props(self) -> dict:
         return dict(url=self.sql_db_uri)

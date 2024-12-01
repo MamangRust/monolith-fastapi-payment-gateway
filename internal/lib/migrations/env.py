@@ -38,7 +38,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    database_url = os.getenv('DATABASE_URL', 'postgresql://root:root@postgres:5432/payment_gateway')
     context.configure(
         url=url,
         target_metadata=target_metadata,

@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements dari services/api_gateway
+# Copy requirements
 COPY services/api_gateway/requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -17,13 +17,20 @@ COPY lib /app/lib
 # Copy seluruh api_gateway service
 COPY services/api_gateway /app
 
-# Tambahkan PYTHONPATH
+COPY alembic.ini /app
+
+# Tambahkan PYTHONPATH untuk memastikan aplikasi dapat menemukan modul dengan benar
 ENV PYTHONPATH=/app
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
+# Jalankan Alembic migrasi saat build
+# RUN alembic upgrade head || echo "Alembic migration failed during build, check logs."
+
 EXPOSE 8080
 
 WORKDIR /app
-CMD ["python", "main.py"]
+ENTRYPOINT ["bash", "/app/wait-for-it.sh", "postgres:5432", "--"]
+CMD ["sh", "-c", "alembic upgrade head && python main.py"]
+

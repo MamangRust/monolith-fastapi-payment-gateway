@@ -5,7 +5,7 @@ from domain.request.user import CreateUserRequest, UpdateUserRequest
 
 router = APIRouter()
 
-user_client = HttpClient(base_url="http://user-service:8005")
+user_client = HttpClient(base_url="http://user-service:8005/api")
 
 
 @router.get("/users")
@@ -48,7 +48,7 @@ async def create_user(
 ):
     try:
         response = await user_service_client.post(
-            "/users", json=user_request, headers={"Authorization": f"Bearer {token}"}
+            "/users", json=user_request.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:
@@ -67,7 +67,7 @@ async def update_user(
     try:
         response = await user_service_client.put(
             f"/users/{user_id}",
-            json=user_request,
+            json=user_request.model_dump(),
             headers={"Authorization": f"Bearer {token}"},
         )
         return response

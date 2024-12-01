@@ -6,7 +6,7 @@ from domain.request.topup import CreateTopupRequest, UpdateTopupRequest
 
 router = APIRouter()
 
-topup_client = HttpClient(base_url="http://topup-service:8003")
+topup_client = HttpClient(base_url="http://topup-service:8003/api")
 
 
 @router.get("/")
@@ -84,7 +84,7 @@ async def create_topup(
     headers = await get_auth_headers(token)
     try:
         response = await topup_client.post(
-            "/topup", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            "/topup", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:
@@ -102,7 +102,7 @@ async def update_topup(
 ):
     try:
         response = await topup_client.put(
-            f"/topup/{id}", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            f"/topup/{id}", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:

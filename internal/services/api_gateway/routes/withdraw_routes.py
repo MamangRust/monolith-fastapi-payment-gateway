@@ -7,7 +7,7 @@ from domain.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
 
 router = APIRouter()
 
-withdraw_client = HttpClient(base_url="http://withdraw-service:8006")
+withdraw_client = HttpClient(base_url="http://withdraw-service:8006/api")
 
 
 @router.get("/")
@@ -85,7 +85,7 @@ async def create_withdraw(
     headers = await get_auth_headers(token)
     try:
         response = await withdraw_client.post(
-            "/withdraw", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            "/withdraw", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:
@@ -103,7 +103,7 @@ async def update_withdraw(
 ):
     try:
         response = await withdraw_client.put(
-            f"/withdraw/{id}", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            f"/withdraw/{id}", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:

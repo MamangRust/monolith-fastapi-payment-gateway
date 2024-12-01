@@ -42,7 +42,7 @@ scrape_configs:
     static_configs:
       - targets: ['user-service:8005']
         labels:
-          application: 'Transfer Service Application'
+          application: 'User Service Application'
   
 
   - job_name: 'withdraw-service'
@@ -55,6 +55,6 @@ scrape_configs:
   - job_name: 'email-service'
     metrics_path: '/metrics'
     static_configs:
-      - targets: ['email-service:8007']
+      - targets: ['email-service:8008']
         labels:
           application: 'Email Service Application'

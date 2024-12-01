@@ -6,8 +6,8 @@ from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .user import User
+from .base import Base
 
-Base = declarative_base()
 
 
 class Withdraw(Base):

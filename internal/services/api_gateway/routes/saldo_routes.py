@@ -7,7 +7,7 @@ from domain.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
 
 router = APIRouter()
 
-saldo_client = HttpClient(base_url="http://saldo-service:8002")
+saldo_client = HttpClient(base_url="http://saldo-service:8002/api")
 
 
 @router.get("/")
@@ -85,7 +85,7 @@ async def create_saldo(
     headers = await get_auth_headers(token)
     try:
         response = await saldo_client.post(
-            "/saldo", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            "/saldo", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:
@@ -103,7 +103,7 @@ async def update_saldo(
 ):
     try:
         response = await saldo_client.put(
-            f"/saldo/{id}", json=input.dict(), headers={"Authorization": f"Bearer {token}"}
+            f"/saldo/{id}", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:

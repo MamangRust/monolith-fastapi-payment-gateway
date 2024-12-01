@@ -1,13 +1,12 @@
 from sqlalchemy import (
     create_engine, Column, Integer, String, ForeignKey, Text, Sequence, TIMESTAMP, func
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .user import User
+from .base import Base
 
-Base = declarative_base()
 
 
 class Saldo(Base):

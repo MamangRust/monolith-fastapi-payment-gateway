@@ -5,13 +5,13 @@ from domain.request.auth import RegisterRequest, LoginRequest
 
 router = APIRouter()
 
-auth_client = HttpClient(base_url="http://auth-service:8001")
+auth_client = HttpClient(base_url="http://auth-service:8001/api")
 
 
 @router.post("/register")
 async def register_user(request: RegisterRequest):
     try:
-        response = await auth_client.post("/auth/register", json=request)
+        response = await auth_client.post("/auth/register", json=request.model_dump())
         return response
     except HttpClientError as e:
         raise HTTPException(
@@ -27,7 +27,7 @@ async def register_user(request: RegisterRequest):
 @router.post("/login")
 async def login_user(request: LoginRequest):
     try:
-        response = await auth_client.post("/auth/login", json=request)
+        response = await auth_client.post("/auth/login", json=request.model_dump())
         return response
     except HttpClientError as e:
         raise HTTPException(
