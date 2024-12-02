@@ -56,9 +56,7 @@ class TransferService(ITransferService):
             try:
                 logger.info("Retrieving all transfers")
                 transfers = await self.transfer_repository.find_all()
-                transfer_responses = [
-                    TransferResponse.from_dtos(transfer) for transfer in transfers
-                ]
+                transfer_responses = TransferResponse.from_dtos(transfers)
 
                 logger.info(f"Successfully retrieved {len(transfers)} transfers")
                 span.set_attribute("transfer_count", len(transfers))
@@ -119,11 +117,7 @@ class TransferService(ITransferService):
                     raise NotFoundError(f"User with id {id} not found")
 
                 transfers = await self.transfer_repository.find_by_users(id)
-                transfer_responses = (
-                    [TransferResponse.from_dtos(transfer) for transfer in transfers]
-                    if transfers is not None
-                    else None
-                )
+                transfer_responses = TransferResponse.from_dtos(transfers)
 
                 logger.info(
                     f"Successfully retrieved {len(transfer_responses) if transfer_responses else 0} transfers for user {id}"

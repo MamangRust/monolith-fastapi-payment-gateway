@@ -33,6 +33,6 @@ class UpdateUserRequest(BaseModel):
         password = values.get("password")
         confirm = values.get("confirm_password")
 
-        if password != confirm_password:
+        if password != confirm:
             raise ValueError('Password and confirm password must match')
         return values

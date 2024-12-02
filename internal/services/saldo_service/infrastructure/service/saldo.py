@@ -27,10 +27,10 @@ class SaldoService(ISaldoService):
         self.otel_manager = otel_manager
 
     async def get_saldos(self) -> Union[ApiResponse[List[SaldoResponse]], ErrorResponse]:
-        with self.otel_manager.start_trace("Get All Saldos") as span:
+        with self.otel_manager.start_trace(span_name="Get All Saldos") as span:
             try:
                 saldo = await self.saldo_repository.find_all()
-                saldo_response = [SaldoResponse.from_dtos(s) for s in saldo]
+                saldo_response = SaldoResponse.from_dtos(saldo)
                 span.set_attribute("saldo_count", len(saldo_response))
                 return ApiResponse(
                     status="success",
@@ -39,7 +39,8 @@ class SaldoService(ISaldoService):
                 )
             except Exception as e:
                 span.record_exception(e)
-                logger.error("Error retrieving saldos")
+
+                logger.error("Error retrieving saldos : {e}".format(e))
                 return ErrorResponse(
                     status="error",
                     message="An unexpected error occurred. Please try again later."
@@ -74,7 +75,7 @@ class SaldoService(ISaldoService):
                 )
 
     async def get_saldo_users(self, id: int) -> Union[ApiResponse[Optional[List[SaldoResponse]]], ErrorResponse]:
-        with self.otel_manager.start_trace("Get Saldos for User") as span:
+        with self.otel_manager.start_trace("Get Saldos for Users") as span:
             span.set_attribute("user_id", id)
             try:
                 user = await self.user_repository.find_by_id(id)
@@ -82,8 +83,8 @@ class SaldoService(ISaldoService):
                     span.set_attribute("error", "User not found")
                     raise AppError.not_found(f"User with id {id} not found")
                 
-                saldo = await self.saldo_repository.find_by_user_id(id)
-                saldo_responses = [SaldoResponse.from_dtos(s) for s in saldo] if saldo else None
+                saldo = await self.saldo_repository.find_by_users_id(id)
+                saldo_responses = SaldoResponse.from_dtos(saldo)
 
                 span.set_attribute("saldo_count", len(saldo_responses) if saldo_responses else 0)
                 return ApiResponse(
@@ -126,7 +127,7 @@ class SaldoService(ISaldoService):
             try:
                 saldo_data = await self.saldo_repository.find_by_user_id(id)
                 saldo = (
-                    SaldoResponse.from_model(saldo_data)
+                    SaldoResponse.from_dto(saldo_data)
                     if saldo_data is not None
                     else None
                 )
@@ -160,23 +161,27 @@ class SaldoService(ISaldoService):
         with self.otel_manager.start_trace("Create Saldo") as span:
             span.set_attribute("user_id", input.user_id)
             span.set_attribute("total_balance", input.total_balance)
+            producer = None
             try:
                 user = await self.user_repository.find_by_id(input.user_id)
                 if not user:
                     raise AppError.not_found(f"User with id {input.user_id} not found")
 
                 saldo = await self.saldo_repository.create(input)
+
                 producer = await self.kafka_manager.get_producer()
+            
                 email_message = {
                     "email": user.email,
                     "subject": "Saldo Created",
                     "body": f"Hi {user.firstname} {user.lastname}, your saldo has been successfully created with an amount of {input.total_balance}."
                 }
-                await producer.send_and_wait(
-                    topic="email-service-topic-saldo",
+                
+                # Use send with value only
+                await producer.send(
+                    topic="email-service-topic-saldo", 
                     value=json.dumps(email_message).encode("utf-8")
                 )
-                await producer.stop()
 
                 logger.info("Saldo created successfully", user_id=input.user_id)
                 return ApiResponse(
@@ -198,6 +203,9 @@ class SaldoService(ISaldoService):
                     status="error",
                     message="An unexpected error occurred. Please try again later."
                 )
+            finally:
+                if producer:
+                    await producer.stop()
 
     async def update_saldo(self, input: UpdateSaldoRequest) -> Union[ApiResponse[Optional[SaldoResponse]], ErrorResponse]:
         with self.otel_manager.start_trace("Update Saldo") as span:

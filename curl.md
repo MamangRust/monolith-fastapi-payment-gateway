@@ -5,86 +5,82 @@
 ### POST Request - Register User
 
 ```sh
-curl -X POST "http://localhost:8001/api/auth/register" \
+curl -X POST "http://localhost:8080/api/auth/register" \
 -H "Content-Type: application/json" \
 -d '{
-    "firstname": "FIRSTNAME",
-    "lastname": "LASTNAME",
-    "email": "EMAIL",
-    "password": "PASSWORD",
-    "confirm_password": "CONFIRM_PASSWORD"
+  "firstname": "John",
+  "lastname": "Doe",
+  "email": "john.doe@example.com",
+  "password": "password123",
+  "confirm_password": "password123"
 }'
 ```
 
 ### POST Request - Login User
 
 ```sh
-curl -X POST "http://localhost:8001/api/auth/login" \
+curl -X POST "http://localhost:8080/api/auth/login" \
 -H "Content-Type: application/json" \
 -d '{
-    "email": "EMAIL",
-    "password": "PASSWORD"
+  "email": "john.doe@example.com",
+  "password": "password123"
 }'
 ```
 
 ## User Receiver
 
-
 ```sh
-curl -X POST "http://localhost:8001/api/auth/register" \
+curl -X POST "http://localhost:8080/api/auth/register" \
 -H "Content-Type: application/json" \
 -d '{
-    "firstname": "FIRSTNAME",
-    "lastname": "LASTNAME",
-    "email": "EMAIL",
-    "password": "PASSWORD",
-    "confirm_password": "CONFIRM_PASSWORD"
+  "firstname": "Jane",
+  "lastname": "Doe",
+  "email": "jane.doe@example.com",
+  "password": "password123",
+  "confirm_password": "password123"
 }'
 ```
 
 ### POST Request - Login User
 
 ```sh
-curl -X POST "http://localhost:8001/api/auth/login" \
+curl -X POST "http://localhost:8080/api/auth/login" \
 -H "Content-Type: application/json" \
 -d '{
-    "email": "EMAIL",
-    "password": "PASSWORD"
+  "email": "jane.doe@example.com",
+  "password": "password123"
 }'
 ```
 
-------------------------------------------------------
-
+---
 
 # Users Service
 
-## Sender
 
 ### GET Request - Retrieve all users
 
 ```sh
-curl -X GET "http://localhost:8005/api/users" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
+curl -X GET "http://localhost:8080/api/users" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
 ```
 
 ### GET Request - Retrieve a user by ID
 
 ```sh
-curl -X GET "http://localhost:8005/api/users/USER_ID" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
+curl -X GET "http://localhost:8080/api/users/7" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
 ```
 
 ### POST Request - Create a new user
 
 ```sh
-curl -X POST "http://localhost:8005/api/users" \
--H "Authorization: Bearer YOUR_BEARER_TOKEN" \
+curl -X POST "http://localhost:8080/api/users" 
 -H "Content-Type: application/json" \
 -d '{
-    "firstname": "FIRSTNAME",
-    "lastname": "LASTNAME",
-    "email": "EMAIL",
-    "password": "PASSWORD",
-    "confirm_password": "CONFIRM_PASSWORD",
-    "noc_transfer": "OPTIONAL_NOC_TRANSFER_VALUE"
+  "firstname": "sipaling",
+  "lastname": "dota",
+  "email": "mendota@example.com",
+  "password": "mendota123",
+  "confirm_password": "mendota123",
+  "noc_transfer": "48285936453198575"
 }'
 
 ```
@@ -92,83 +88,29 @@ curl -X POST "http://localhost:8005/api/users" \
 ### PUT Request - Update user information
 
 ```sh
-curl -X PUT "http://localhost:8005/api/users/USER_ID" \
+curl -X PUT "http://localhost:8080/api/users/7" \
 -H "Authorization: Bearer YOUR_BEARER_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{
-    "firstname": "FIRSTNAME",
-    "lastname": "LASTNAME",
-    "email": "EMAIL",
-    "password": "PASSWORD",
-    "confirm_password": "CONFIRM_PASSWORD"
+  "id": 7,
+  "firstname": "sipaling",
+  "lastname": "dota",
+  "email": "mendota@example.com",
+  "password": "mendota123",
+  "confirm_password": "mendota123"
+ 
 }'
 ```
 
 ### DELETE Request - Delete a user by ID
 
-
 ```sh
-curl -X DELETE "http://localhost:8005/api/users/USER_ID" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
+curl -X DELETE "http://localhost:8080/api/users/7" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
 ```
-
-## Receiver
-
-### GET Request - Retrieve all users
-
-```sh
-curl -X GET "http://localhost:8005/api/users" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
-```
-
-### GET Request - Retrieve a user by ID
-
-```sh
-curl -X GET "http://localhost:8005/api/users/USER_ID" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
-```
-
-### POST Request - Create a new user
-
-```sh
-curl -X POST "http://localhost:8005/api/users" \
--H "Authorization: Bearer YOUR_BEARER_TOKEN" \
--H "Content-Type: application/json" \
--d '{
-    "firstname": "FIRSTNAME",
-    "lastname": "LASTNAME",
-    "email": "EMAIL",
-    "password": "PASSWORD",
-    "confirm_password": "CONFIRM_PASSWORD",
-    "noc_transfer": "OPTIONAL_NOC_TRANSFER_VALUE"
-}'
-
-```
-
-### PUT Request - Update user information
-
-```sh
-curl -X PUT "http://localhost:8005/api/users/USER_ID" \
--H "Authorization: Bearer YOUR_BEARER_TOKEN" \
--H "Content-Type: application/json" \
--d '{
-    "firstname": "FIRSTNAME",
-    "lastname": "LASTNAME",
-    "email": "EMAIL",
-    "password": "PASSWORD",
-    "confirm_password": "CONFIRM_PASSWORD"
-}'
-```
-
-### DELETE Request - Delete a user by ID
-
-
-```sh
-curl -X DELETE "http://localhost:8005/api/users/USER_ID" -H "Authorization: Bearer YOUR_BEARER_TOKEN"
-```
-
----------------------------------
+---
 
 ## Saldo Service
 
-
 ## Sender
 
 ### GET Request - Get All Saldos
@@ -226,7 +168,6 @@ curl -X PUT "http://localhost:8002/api/saldo/1" \
 }'
 ```
 
-
 ### DELETE Request - Delete a Saldo by ID
 
 ```sh
@@ -234,7 +175,6 @@ curl -X DELETE "http://localhost:8002/api/saldo/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 
 ```
-
 
 ## Receiver
 
@@ -293,7 +233,6 @@ curl -X PUT "http://localhost:8002/api/saldo/1" \
 }'
 ```
 
-
 ### DELETE Request - Delete a Saldo by ID
 
 ```sh
@@ -302,7 +241,7 @@ curl -X DELETE "http://localhost:8002/api/saldo/1" \
 
 ```
 
-------------------------------------------
+---
 
 # Topup Service
 
@@ -315,7 +254,6 @@ curl -X GET "http://localhost:8003/api/topup" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-
 ### GET Request - Get a Single Topup by ID
 
 ```sh
@@ -330,14 +268,12 @@ curl -X GET "http://localhost:8003/api/topup/user/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-
 ### GET Request - Get Topup for Multiple Users by User ID
 
 ```sh
 curl -X GET "http://localhost:8003/api/topup/users/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
-
 
 ### POST Request - Create a New Topup
 
@@ -352,7 +288,6 @@ curl -X POST "http://localhost:8003/api/topup" \
     "topup_method": "dana"
 }'
 ```
-
 
 ### PUT Request - Update an Existing Topup
 
@@ -369,7 +304,6 @@ curl -X PUT "http://localhost:8003/api/topup/1" \
 
 ```
 
-
 ### DELETE Request - Delete a Topup by ID
 
 ```sh
@@ -377,10 +311,9 @@ curl -X DELETE "http://localhost:8003/api/topup/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-------------------------------
+---
 
 ## Receiver
-
 
 ### GET Request - Get All Topup
 
@@ -389,7 +322,6 @@ curl -X GET "http://localhost:8003/api/topup" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-
 ### GET Request - Get a Single Topup by ID
 
 ```sh
@@ -404,14 +336,12 @@ curl -X GET "http://localhost:8003/api/topup/user/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
-
 ### GET Request - Get Topup for Multiple Users by User ID
 
 ```sh
 curl -X GET "http://localhost:8003/api/topup/users/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
-
 
 ### POST Request - Create a New Topup
 
@@ -426,7 +356,6 @@ curl -X POST "http://localhost:8003/api/topup" \
     "topup_method": "dana"
 }'
 ```
-
 
 ### PUT Request - Update an Existing Topup
 
@@ -443,7 +372,6 @@ curl -X PUT "http://localhost:8003/api/topup/1" \
 
 ```
 
-
 ### DELETE Request - Delete a Topup by ID
 
 ```sh
@@ -451,12 +379,10 @@ curl -X DELETE "http://localhost:8003/api/topup/1" \
 -H "Authorization: Bearer YOUR_TOKEN"
 ```
 
---------------------------------------
-
+---
 
 # Transfer Service
 
-
 ## Sender
 
 ### GET Request - Get All Transfer
@@ -468,7 +394,6 @@ curl -X GET "http://localhost:8004/api/transfer" \
 
 ```
 
-
 ### GET Request - Get a Single Transfer by ID
 
 ```sh
@@ -477,7 +402,6 @@ curl -X GET "http://localhost:8004/api/transfer/1" \
 -H "Content-Type: application/json"
 ```
 
-
 ### GET Request - Get Transfer by User ID
 
 ```sh
@@ -485,7 +409,6 @@ curl -X GET "http://localhost:8004/api/transfer/user/123" \
 -H "Authorization: Bearer <your-token>" \
 -H "Content-Type: application/json"
 ```
-
 
 ### GET Request - Get Transfer for Multiple Users by User ID
 
@@ -511,7 +434,6 @@ curl -X POST "http://localhost:8004/api/transfer" \
 }'
 ```
 
-
 ### PUT Request - Update an Existing Transfer
 
 ```sh
@@ -527,7 +449,6 @@ curl -X PUT "http://localhost:8004/api/transfer/1" \
 }'
 ```
 
-
 ### DELETE Request - Delete a Transfer by ID
 
 ```sh
@@ -536,7 +457,6 @@ curl -X DELETE "http://localhost:8004/api/transfer/1" \
 -H "Content-Type: application/json"
 
 ```
-
 
 ## Receiver
 
@@ -549,7 +469,6 @@ curl -X GET "http://localhost:8004/api/transfer" \
 
 ```
 
-
 ### GET Request - Get a Single Transfer by ID
 
 ```sh
@@ -558,7 +477,6 @@ curl -X GET "http://localhost:8004/api/transfer/1" \
 -H "Content-Type: application/json"
 ```
 
-
 ### GET Request - Get Transfer by User ID
 
 ```sh
@@ -566,7 +484,6 @@ curl -X GET "http://localhost:8004/api/transfer/user/123" \
 -H "Authorization: Bearer <your-token>" \
 -H "Content-Type: application/json"
 ```
-
 
 ### GET Request - Get Transfer for Multiple Users by User ID
 
@@ -592,7 +509,6 @@ curl -X POST "http://localhost:8004/api/transfer" \
 }'
 ```
 
-
 ### PUT Request - Update an Existing Transfer
 
 ```sh
@@ -608,7 +524,6 @@ curl -X PUT "http://localhost:8004/api/transfer/1" \
 }'
 ```
 
-
 ### DELETE Request - Delete a Transfer by ID
 
 ```sh
@@ -618,12 +533,10 @@ curl -X DELETE "http://localhost:8004/api/transfer/1" \
 
 ```
 
---------------------------------------------------------
-
+---
 
 # Withdraw Service
 
-
 ## Sender
 
 ### GET Request - Get All Withdraw
@@ -634,7 +547,6 @@ curl -X GET "http://localhost:8006/api/withdraw" \
 -H "Content-Type: application/json"
 
 ```
-
 
 ### GET Request - Get a Single Withdraw by ID
 
@@ -654,8 +566,6 @@ curl -X GET "http://localhost:8006/api/withdraw/user/123" \
 
 ```
 
-
-
 ### GET Request - Get Withdraw for Multiple Users by User ID
 
 ```sh
@@ -665,9 +575,7 @@ curl -X GET "http://localhost:8006/api/withdraw/users/123" \
 
 ```
 
-
 ### POST Request - Create a New Withdraw
-
 
 ```sh
 curl -X POST "http://localhost:8006/api/withdraw" \
@@ -681,7 +589,6 @@ curl -X POST "http://localhost:8006/api/withdraw" \
 }'
 
 ```
-
 
 ### PUT Request - Update an Existing Withdraw
 
@@ -699,7 +606,6 @@ curl -X PUT "http://localhost:8006/api/withdraw/1" \
 
 ```
 
-
 ### DELETE Request - Delete a Withdraw by ID
 
 ```sh
@@ -708,8 +614,6 @@ curl -X DELETE "http://localhost:8006/api/withdraw/1" \
 -H "Content-Type: application/json"
 
 ```
-
-
 
 ## Receiver
 
@@ -722,7 +626,6 @@ curl -X GET "http://localhost:8006/api/withdraw" \
 
 ```
 
-
 ### GET Request - Get a Single Withdraw by ID
 
 ```sh
@@ -741,8 +644,6 @@ curl -X GET "http://localhost:8006/api/withdraw/user/123" \
 
 ```
 
-
-
 ### GET Request - Get Withdraw for Multiple Users by User ID
 
 ```sh
@@ -752,9 +653,7 @@ curl -X GET "http://localhost:8006/api/withdraw/users/123" \
 
 ```
 
-
 ### POST Request - Create a New Withdraw
-
 
 ```sh
 curl -X POST "http://localhost:8006/api/withdraw" \
@@ -768,7 +667,6 @@ curl -X POST "http://localhost:8006/api/withdraw" \
 }'
 
 ```
-
 
 ### PUT Request - Update an Existing Withdraw
 
@@ -786,7 +684,6 @@ curl -X PUT "http://localhost:8006/api/withdraw/1" \
 
 ```
 
-
 ### DELETE Request - Delete a Withdraw by ID
 
 ```sh
@@ -796,4 +693,4 @@ curl -X DELETE "http://localhost:8006/api/withdraw/1" \
 
 ```
 
----------------------------------
+---

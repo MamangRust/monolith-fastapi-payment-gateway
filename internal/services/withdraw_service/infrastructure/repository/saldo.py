@@ -33,7 +33,7 @@ class SaldoRepository(ISaldoRepository):
         """
         new_saldo = Saldo(
             user_id=input.user_id,
-            balance=input.balance,
+            total_balance=input.total_balance,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -48,8 +48,8 @@ class SaldoRepository(ISaldoRepository):
         """
         result = await self.session.execute(
             update(Saldo)
-            .where(Saldo.id == input.id)
-            .values(balance=input.balance, updated_at=datetime.utcnow())
+            .where(Saldo.user_id == input.user_id)
+            .values(total_balance=input.total_balance, updated_at=datetime.utcnow())
             .returning(Saldo)
         )
         updated_saldo = result.scalars().first()

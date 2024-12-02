@@ -38,7 +38,7 @@ class UserService(IUserService):
         with self.otel_manager.start_trace("Get Users") as span:
             try:
                 users = await self.repository.find_all()
-                user_responses = [UserResponse.from_dto(user) for user in users]
+                user_responses = UserResponse.from_dtos(users)
                 return ApiResponse(
                     status="success",
                     message="Successfully retrieved users.",

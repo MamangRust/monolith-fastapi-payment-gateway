@@ -3,8 +3,9 @@ from opentelemetry.instrumentation.aiokafka import AIOKafkaInstrumentor
 
 
 class KafkaManager:
-    def __init__(self, bootstrap_servers: str):
-        AIOKafkaInstrumentor().instrument()
+    def __init__(self, bootstrap_servers: str, instrumented: bool = False):
+        if not instrumented:
+            AIOKafkaInstrumentor().instrument()
         self.bootstrap_servers = bootstrap_servers
 
     async def get_producer(self):

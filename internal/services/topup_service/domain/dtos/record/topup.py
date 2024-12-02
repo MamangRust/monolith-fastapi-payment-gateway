@@ -12,3 +12,4 @@ class TopupRecordDTO(BaseModel):
 
     class Config:
         orm_config = True
+        from_attributes = True

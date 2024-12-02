@@ -19,9 +19,10 @@ async def get_topups(
         )
         return response
     except HttpClientError as e:
+        print("e : {}".format(e))
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred: {e.message} - {e.details}",
+            detail=f"An error occurred: ",
         )
 
 
@@ -38,7 +39,7 @@ async def get_topup(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving topup {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving topup {id}: ",
         )
 
 
@@ -55,7 +56,7 @@ async def get_topup_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving transfer for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving transfer for user {user_id}: ",
         )
 
 
@@ -72,7 +73,7 @@ async def get_topup_users(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving transfers for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving transfers for user {user_id}: ",
         )
 
 
@@ -81,7 +82,6 @@ async def create_topup(
     input: CreateTopupRequest,
     token: str = Depends(token_security),
 ):
-    headers = await get_auth_headers(token)
     try:
         response = await topup_client.post(
             "/topup", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
@@ -90,7 +90,7 @@ async def create_topup(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while creating topup: {e.message} - {e.details}",
+            detail=f"An error occurred while creating topup: ",
         )
 
 
@@ -108,7 +108,7 @@ async def update_topup(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while updating topup {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while updating topup {id}: ",
         )
 
 
@@ -125,5 +125,5 @@ async def delete_topup(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while deleting topup {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while deleting topup {id}: ",
         )

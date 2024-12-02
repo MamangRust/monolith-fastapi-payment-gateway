@@ -101,7 +101,7 @@ async def get_withdraw_users(
         REQUEST_COUNT.labels(method, endpoint, 'error').inc()
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
-@router.post("/", response_model=ApiResponse[WithdrawResponse])
+@router.post("", response_model=ApiResponse[WithdrawResponse])
 async def create_withdraw(
     input: CreateWithdrawRequest,
     withdraw_service: IWithdrawService = Depends(get_withdraw_service),
@@ -133,7 +133,7 @@ async def update_withdraw(
     method = 'PUT'
     endpoint = f'/{id}'
     try:
-        input.id = id  # Ensure the ID in the path matches the request
+        input.withdraw_id = id  # Ensure the ID in the path matches the request
         with REQUEST_DURATION.labels(method, endpoint).time():
             response = await withdraw_service.update_withdraw(input)
             status = 'success' if not isinstance(response, ErrorResponse) else 'error'

@@ -134,8 +134,6 @@ services:
       - JWT_ALGORITHM=HS256
 
 
-  
-
   # Saldo Service
   saldo-service:
     build:
@@ -278,7 +276,7 @@ services:
       - JWT_SECRET_KEY=hello
       - JWT_TOKEN_EXPIRATION_MINUTES=10080
       - JWT_ALGORITHM=HS256
-      - SMTP_USER=
-      - SMTP_PASSWORD=
+      - SMTP_USER=magnolia.schmitt33@ethereal.email
+      - SMTP_PASSWORD=Rc98mbg22kNYwUqEuK
 
   

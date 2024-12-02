@@ -19,7 +19,6 @@ class SaldoRepository(ISaldoRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-
     async def find_by_user_id(self, id: int) -> Optional[SaldoRecordDTO]:
         """
         Find a single saldo record associated with a given user ID.
@@ -34,7 +33,7 @@ class SaldoRepository(ISaldoRepository):
         """
         new_saldo = Saldo(
             user_id=input.user_id,
-            balance=input.balance,
+            total_balance=input.total_balance,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -43,17 +42,14 @@ class SaldoRepository(ISaldoRepository):
         await self.session.refresh(new_saldo)
         return SaldoRecordDTO.from_orm(new_saldo)
 
-    async def update_balance(self,  input: UpdateSaldoBalanceRequest) -> SaldoRecordDTO:
+    async def update_balance(self, input: UpdateSaldoBalanceRequest) -> SaldoRecordDTO:
         """
         Update the balance of an existing saldo record.
         """
         result = await self.session.execute(
             update(Saldo)
-            .where(Saldo.id == input.id)
-            .values(
-                balance=input.balance,
-                updated_at=datetime.utcnow()
-            )
+            .where(Saldo.user_id == input.user_id)
+            .values(total_balance=input.total_balance, updated_at=datetime.utcnow())
             .returning(Saldo)
         )
         updated_saldo = result.scalars().first()

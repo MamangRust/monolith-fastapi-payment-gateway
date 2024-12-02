@@ -21,7 +21,7 @@ async def get_transfers(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred: {e.message} - {e.details}",
+            detail=f"An error occurred: ",
         )
 
 
@@ -38,7 +38,7 @@ async def get_transfer(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving transfer {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving transfer {id}: ",
         )
 
 
@@ -55,7 +55,7 @@ async def get_transfer_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving transfer for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving transfer for user {user_id}: ",
         )
 
 
@@ -72,7 +72,7 @@ async def get_transfer_users(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving transfers for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving transfers for user {user_id}: ",
         )
 
 
@@ -81,7 +81,6 @@ async def create_transfer(
     input: CreateTransferRequest,
     token: str = Depends(token_security),
 ):
-    headers = await get_auth_headers(token)
     try:
         response = await transfer_client.post(
             "/transfer", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
@@ -90,7 +89,7 @@ async def create_transfer(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while creating transfer: {e.message} - {e.details}",
+            detail=f"An error occurred while creating transfer: ",
         )
 
 
@@ -108,7 +107,7 @@ async def update_transfer(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while updating transfer {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while updating transfer {id}: ",
         )
 
 
@@ -125,5 +124,5 @@ async def delete_transfer(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while deleting transfer {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while deleting transfer {id}: ",
         )

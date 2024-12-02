@@ -103,7 +103,7 @@ async def get_transfer_users(
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
-@router.post("/", response_model=ApiResponse[TransferResponse])
+@router.post("", response_model=ApiResponse[TransferResponse])
 async def create_transfer(
     input: CreateTransferRequest,
     transfer_service: ITransferService = Depends(get_transfer_service),
@@ -136,7 +136,7 @@ async def update_transfer(
     method = 'PUT'
     endpoint = f'/{id}'
     try:
-        input.id = id  # Ensure the ID in the path matches the request
+        input.transfer_id = id  # Ensure the ID in the path matches the request
         with REQUEST_DURATION.labels(method, endpoint).time():
             response = await transfer_service.update_transfer(input)
             status = 'success' if not isinstance(response, ErrorResponse) else 'error'

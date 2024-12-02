@@ -114,7 +114,7 @@ async def get_saldo_users(
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
-@router.post("/", response_model=ApiResponse[SaldoResponse])
+@router.post("", response_model=ApiResponse[SaldoResponse])
 async def create_saldo(
     input: CreateSaldoRequest,
     saldo_service: ISaldoService = Depends(get_saldo_service),
@@ -147,7 +147,7 @@ async def update_saldo(
     method = 'PUT'
     endpoint = f'/{id}'
     try:
-        input.id = id  # Ensure the ID in the path matches the request
+        input.saldo_id = id  # Ensure the ID in the path matches the request
         with REQUEST_DURATION.labels(method, endpoint).time():
             response = await saldo_service.update_saldo(input)
             status = 'success' if not isinstance(response, ErrorResponse) else 'error'

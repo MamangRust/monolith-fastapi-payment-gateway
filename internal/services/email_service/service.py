@@ -28,7 +28,7 @@ class EmailService:
             async for msg in consumer:
                 topic = msg.topic
                 message = json.loads(msg.value.decode("utf-8"))
-                async with self.otel_manager.start_trace(f"Process Kafka Message: {topic}"):
+                with self.otel_manager.start_trace(f"Process Kafka Message: {topic}"):
                     await self.process_message(topic, message)
         finally:
             await consumer.stop()
@@ -36,7 +36,7 @@ class EmailService:
     async def process_message(self, topic, message):
         """Process messages from different topics."""
         try:
-            async with self.otel_manager.start_trace(f"Handle Topic: {topic}"):
+            with self.otel_manager.start_trace(f"Handle Topic: {topic}"):
                 if topic == "email-service-topic-saldo":
                     await self.handle_saldo_email(message)
                 elif topic == "email-service-topic-topup":
@@ -51,7 +51,7 @@ class EmailService:
         email = message.get("email")
         subject = "Saldo Created Successfully"
         body = message.get("body", "Your saldo has been successfully created.")
-        async with self.otel_manager.start_trace("Send Saldo Email"):
+        with self.otel_manager.start_trace("Send Saldo Email"):
             await self.send_email(email, subject, body)
 
     async def handle_topup_email(self, message):
@@ -59,7 +59,7 @@ class EmailService:
         email = message.get("email")
         subject = "Topup Successful"
         body = message.get("body", "Your topup has been successfully processed.")
-        async with self.otel_manager.start_trace("Send Topup Email"):
+        with self.otel_manager.start_trace("Send Topup Email"):
             await self.send_email(email, subject, body)
 
     async def handle_transfer_email(self, message):
@@ -69,10 +69,10 @@ class EmailService:
         subject = message.get("subject")
         body = message.get("body")
         if sender_email:
-            async with self.otel_manager.start_trace("Send Transfer Email - Sender"):
+            with self.otel_manager.start_trace("Send Transfer Email - Sender"):
                 await self.send_email(sender_email, subject, body)
         if receiver_email:
-            async with self.otel_manager.start_trace("Send Transfer Email - Receiver"):
+            with self.otel_manager.start_trace("Send Transfer Email - Receiver"):
                 await self.send_email(receiver_email, subject, body)
 
     async def send_email(self, to_email, subject, body):
@@ -82,7 +82,7 @@ class EmailService:
             return
         try:
             with self.email_send_duration.time():  # Measure the duration of sending the email
-                async with self.otel_manager.start_trace("SMTP Email Send"):
+                with self.otel_manager.start_trace("SMTP Email Send"):
                     msg = MIMEText(body)
                     msg["Subject"] = subject
                     msg["From"] = self.smtp_user

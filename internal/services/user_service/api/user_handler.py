@@ -62,7 +62,7 @@ async def get_user_by_id(
         )
 
 
-@router.post("/", response_model=ApiResponse[UserResponse])
+@router.post("", response_model=ApiResponse[UserResponse])
 async def create_user(
     user_request: CreateUserRequest,
     user_service: IUserService = Depends(get_user_service),

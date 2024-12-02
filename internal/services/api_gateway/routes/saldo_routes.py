@@ -40,7 +40,7 @@ async def get_saldo(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving saldo {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving saldo {id}: ",
         )
 
 
@@ -57,7 +57,7 @@ async def get_saldo_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving saldo for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving saldo for user {user_id}: ",
         )
 
 
@@ -74,7 +74,7 @@ async def get_saldo_users(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving saldos for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving saldos for user {user_id}: ",
         )
 
 
@@ -83,16 +83,18 @@ async def create_saldo(
     input: CreateSaldoRequest,
     token: str = Depends(token_security),
 ):
-    headers = await get_auth_headers(token)
+
     try:
         response = await saldo_client.post(
-            "/saldo", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
+            "/saldo",
+            json=input.model_dump(),
+            headers={"Authorization": f"Bearer {token}"},
         )
         return response
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while creating saldo: {e.message} - {e.details}",
+            detail=f"An error occurred while creating saldo: ",
         )
 
 
@@ -104,13 +106,15 @@ async def update_saldo(
 ):
     try:
         response = await saldo_client.put(
-            f"/saldo/{id}", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
+            f"/saldo/{id}",
+            json=input.model_dump(),
+            headers={"Authorization": f"Bearer {token}"},
         )
         return response
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while updating saldo {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while updating saldo {id}: ",
         )
 
 
@@ -127,5 +131,5 @@ async def delete_saldo(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while deleting saldo {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while deleting saldo {id}: ",
         )

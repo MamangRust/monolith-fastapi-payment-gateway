@@ -23,7 +23,6 @@ class TransferRepository(ITransferRepository):
     def __init__(self, session: AsyncSession):
         self.session = session
 
-
     async def find_all(self) -> List[TransferRecordDTO]:
         """
         Retrieve all transfer records.
@@ -36,7 +35,9 @@ class TransferRepository(ITransferRepository):
         """
         Find a transfer record by its ID.
         """
-        result = await self.session.execute(select(Transfer).filter(Transfer.id == id))
+        result = await self.session.execute(
+            select(Transfer).filter(Transfer.transfer_id == id)
+        )
         transfer = result.scalars().first()
         return TransferRecordDTO.from_orm(transfer) if transfer else None
 
@@ -45,23 +46,34 @@ class TransferRepository(ITransferRepository):
         Find all transfer records associated with a given user ID.
         """
         result = await self.session.execute(
-            select(Transfer).filter(Transfer.user_id == user_id)
+            select(Transfer)
+            .filter(
+                or_(
+                    Transfer.transfer_from == user_id,
+                    Transfer.transfer_to == user_id
+                )
+            )
+            .order_by(Transfer.created_at.desc())  
         )
-        transfers = result.scalars().all()
-        return (
-            [TransferRecordDTO.from_orm(transfer) for transfer in transfers]
-            if transfers
-            else None
-        )
+        transfers = result.scalars().all() 
+        return [TransferRecordDTO.from_orm(t) for t in transfers]
 
     async def find_by_user(self, user_id: int) -> Optional[TransferRecordDTO]:
         """
         Find a single transfer record associated with a given user ID.
         """
         result = await self.session.execute(
-            select(Transfer).filter(Transfer.user_id == user_id)
+            select(Transfer)
+            .filter(
+                or_(
+                    Transfer.transfer_from == user_id,  
+                    Transfer.transfer_to == user_id, 
+                )
+            )
+            .limit(1) 
         )
-        transfer = result.scalars().first()
+
+        transfer = result.scalars().first()  # Get the first (and only) matching transfer
         return TransferRecordDTO.from_orm(transfer) if transfer else None
 
     async def create(self, input: CreateTransferRequest) -> TransferRecordDTO:
@@ -69,9 +81,10 @@ class TransferRepository(ITransferRepository):
         Create a new transfer record from the given input.
         """
         new_transfer = Transfer(
-            user_id=input.user_id,
-            amount=input.amount,
-            recipient_id=input.recipient_id,
+            transfer_from=input.transfer_from,
+            transfer_to=input.transfer_to,
+            transfer_amount=input.transfer_amount,
+            transfer_time=datetime.utcnow(),
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -86,11 +99,13 @@ class TransferRepository(ITransferRepository):
         """
         result = await self.session.execute(
             update(Transfer)
-            .where(Transfer.id == input.id)
+            .where(Transfer.transfer_id == input.transfer_id)
             .values(
-                user_id=input.user_id,
-                amount=input.amount,
-                recipient_id=input.recipient_id,
+                transfer_id=input.transfer_id,
+                transfer_from=input.transfer_from,
+                transfer_to=input.transfer_to,
+                transfer_amount=input.transfer_amount,
+                transfer_time=datetime.utcnow(),
                 updated_at=datetime.utcnow(),
             )
             .returning(Transfer)
@@ -111,8 +126,12 @@ class TransferRepository(ITransferRepository):
         """
         result = await self.session.execute(
             update(Transfer)
-            .where(Transfer.id == input.id)
-            .values(amount=input.amount, updated_at=datetime.utcnow())
+            .where(Transfer.transfer_id == input.transfer_id)
+            .values(
+                transfer_id=input.transfer_id,
+                transfer_amount=input.transfer_amount,
+                updated_at=datetime.utcnow(),
+            )
             .returning(Transfer)
         )
         updated_transfer = result.scalars().first()
@@ -127,7 +146,9 @@ class TransferRepository(ITransferRepository):
         """
         Delete a transfer record by its ID.
         """
-        result = await self.session.execute(delete(Transfer).where(Transfer.id == id))
+        result = await self.session.execute(
+            delete(Transfer).where(Transfer.transfer_id == id)
+        )
         if result.rowcount == 0:
             raise ValueError("Transfer record not found")
         await self.session.commit()

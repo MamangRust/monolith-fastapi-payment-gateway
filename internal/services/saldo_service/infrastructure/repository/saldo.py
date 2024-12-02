@@ -23,15 +23,19 @@ class SaldoRepository(ISaldoRepository):
         """
         Retrieve all saldo records.
         """
-        result = await self.session.execute(select(Saldo))
-        saldos = result.scalars().all()
-        return [SaldoRecordDTO.from_orm(saldo) for saldo in saldos]
+        try:
+           
+            result = await self.session.execute(select(Saldo))
+            saldos = result.scalars().all()
+            return [SaldoRecordDTO.from_orm(saldo) for saldo in saldos]
+        finally:
+            await self.session.close()
 
     async def find_by_id(self, id: int) -> Optional[SaldoRecordDTO]:
         """
         Find a saldo record by its ID.
         """
-        result = await self.session.execute(select(Saldo).filter(Saldo.id == id))
+        result = await self.session.execute(select(Saldo).filter(Saldo.saldo_id == id))
         saldo = result.scalars().first()
         return SaldoRecordDTO.from_orm(saldo) if saldo else None
 
@@ -57,7 +61,7 @@ class SaldoRepository(ISaldoRepository):
         """
         new_saldo = Saldo(
             user_id=input.user_id,
-            balance=input.balance,
+            total_balance=input.total_balance,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -72,10 +76,10 @@ class SaldoRepository(ISaldoRepository):
         """
         result = await self.session.execute(
             update(Saldo)
-            .where(Saldo.id == input.id)
+            .where(Saldo.saldo_id == input.saldo_id)
             .values(
                 user_id=input.user_id,
-                balance=input.balance,
+                total_balance=input.total_balance,
                 updated_at=datetime.utcnow(),
             )
             .returning(Saldo)
@@ -94,8 +98,8 @@ class SaldoRepository(ISaldoRepository):
         """
         result = await self.session.execute(
             update(Saldo)
-            .where(Saldo.id == input.id)
-            .values(balance=input.balance, updated_at=datetime.utcnow())
+            .where(Saldo.user_id == input.user_id)
+            .values(total_balance=input.total_balance, updated_at=datetime.utcnow())
             .returning(Saldo)
         )
         updated_saldo = result.scalars().first()
@@ -110,7 +114,7 @@ class SaldoRepository(ISaldoRepository):
         """
         Delete a saldo record by its ID.
         """
-        result = await self.session.execute(delete(Saldo).where(Saldo.id == id))
+        result = await self.session.execute(delete(Saldo).where(Saldo.saldo_id == id))
         if result.rowcount == 0:
             raise ValueError("Saldo record not found")
         await self.session.commit()

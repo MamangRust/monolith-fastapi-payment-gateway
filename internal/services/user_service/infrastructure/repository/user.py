@@ -61,7 +61,6 @@ class UserRepository(IUserRepository):
                 lastname=user.lastname,
                 email=user.email,
                 password=user.password,
-                noc_transfer=user.noc_transfer,
                 updated_at=datetime.utcnow()
             )
             .returning(User)
@@ -75,7 +74,7 @@ class UserRepository(IUserRepository):
             raise ValueError("User not found")
 
     async def delete_user(self, user_id: int) -> None:
-        result = await self.session.execute(delete(User).where(User.id == user_id))
+        result = await self.session.execute(delete(User).where(User.user_id == user_id))
         if result.rowcount == 0:
             raise ValueError("User not found")
         await self.session.commit()

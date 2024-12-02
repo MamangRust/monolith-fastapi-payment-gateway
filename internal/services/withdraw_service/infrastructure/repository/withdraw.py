@@ -27,7 +27,9 @@ class WithdrawRepository(IWithdrawRepository):
         """
         Find a withdrawal record by its ID.
         """
-        result = await self.session.execute(select(Withdraw).filter(Withdraw.id == id))
+        result = await self.session.execute(
+            select(Withdraw).filter(Withdraw.withdraw_id == id)
+        )
         withdrawal = result.scalars().first()
         return WithdrawRecordDTO.from_orm(withdrawal) if withdrawal else None
 
@@ -38,22 +40,18 @@ class WithdrawRepository(IWithdrawRepository):
         result = await self.session.execute(
             select(Withdraw).filter(Withdraw.user_id == user_id)
         )
-        withdrawals = result.scalars().all()
-        return (
-            [WithdrawRecordDTO.from_orm(withdrawal) for withdrawal in withdrawals]
-            if withdrawals
-            else None
-        )
+        withdraws = result.scalars().all()
+        return [WithdrawRecordDTO.from_orm(withdraw) for withdraw in withdraws]
 
     async def find_by_user(self, user_id: int) -> Optional[WithdrawRecordDTO]:
         """
         Find a single withdrawal record associated with a given user ID.
         """
         result = await self.session.execute(
-            select(Withdraw).filter(Withdraw.user_id == user_id)
+            select(Withdraw).filter(Withdraw.user_id == user_id).limit(1)
         )
-        withdrawal = result.scalars().first()
-        return WithdrawRecordDTO.from_orm(withdrawal) if withdrawal else None
+        withdraw = result.scalars().first()
+        return WithdrawRecordDTO.from_orm(withdraw) if withdraw else None
 
     async def create(self, input: CreateWithdrawRequest) -> WithdrawRecordDTO:
         """
@@ -61,7 +59,8 @@ class WithdrawRepository(IWithdrawRepository):
         """
         new_withdrawal = Withdraw(
             user_id=input.user_id,
-            amount=input.amount,
+            withdraw_amount=input.withdraw_amount,
+            withdraw_time=input.withdraw_time,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -76,9 +75,12 @@ class WithdrawRepository(IWithdrawRepository):
         """
         result = await self.session.execute(
             update(Withdraw)
-            .where(Withdraw.id == input.id)
+            .where(Withdraw.withdraw_id == input.withdraw_id)
             .values(
-                user_id=input.user_id, amount=input.amount, updated_at=datetime.utcnow()
+                user_id=input.user_id,
+                withdraw_amount=input.withdraw_amount,
+                withdraw_time=input.withdraw_time,
+                updated_at=datetime.utcnow(),
             )
             .returning(Withdraw)
         )
@@ -94,7 +96,7 @@ class WithdrawRepository(IWithdrawRepository):
         """
         Delete a withdrawal record by its ID.
         """
-        result = await self.session.execute(delete(Withdraw).where(Withdraw.id == id))
+        result = await self.session.execute(delete(Withdraw).where(Withdraw.withdraw_id == id))
         if result.rowcount == 0:
             raise ValueError("Withdrawal record not found")
         await self.session.commit()

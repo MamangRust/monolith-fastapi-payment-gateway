@@ -58,7 +58,7 @@ class WithdrawService(IWithdrawService):
         with self.otel_manager.start_trace("Get Withdraws") as span:
             try:
                 withdraws = await self.withdraw_repository.find_all()
-                withdraw_responses = [WithdrawResponse.from_dtos(w) for w in withdraws]
+                withdraw_responses = WithdrawResponse.from_dtos(withdraws)
 
                 span.set_attribute("total_withdrawals", len(withdraw_responses))
                 logger.info(f"Successfully fetched {len(withdraw_responses)} withdrawals.")
@@ -129,7 +129,7 @@ class WithdrawService(IWithdrawService):
                     )
 
                 # Map withdrawals to response DTOs
-                withdrawal_responses = [WithdrawResponse.from_dtos(w) for w in withdrawals]
+                withdrawal_responses = WithdrawResponse.from_dtos(withdrawals)
 
                 logger.info(f"Successfully retrieved withdrawals for user with ID {user_id}.")
                 span.set_attribute("withdrawals_found", True)

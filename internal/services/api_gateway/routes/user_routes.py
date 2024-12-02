@@ -37,7 +37,7 @@ async def get_user_by_id(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving user {user_id}",
         )
 
 
@@ -54,7 +54,7 @@ async def create_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while creating user: {e.message} - {e.details}",
+            detail=f"An error occurred while creating user",
         )
 
 
@@ -74,7 +74,7 @@ async def update_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while updating user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while updating user ",
         )
 
 
@@ -91,5 +91,5 @@ async def delete_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while deleting user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while deleting user {user_id}",
         )

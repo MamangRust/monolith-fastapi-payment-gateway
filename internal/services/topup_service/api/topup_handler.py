@@ -95,7 +95,7 @@ async def get_topup_users(
         raise HTTPException(status_code=500, detail=f"An error occurred: {str(e)}")
 
 
-@router.post("/", response_model=ApiResponse[TopupResponse])
+@router.post("", response_model=ApiResponse[TopupResponse])
 async def create_topup(
     input: CreateTopupRequest, topup_service: ITopupService = Depends(get_topup_service), token: str =Depends(token_security)
 ):
@@ -126,7 +126,7 @@ async def update_topup(
     method = 'PUT'
     endpoint = f'/{id}'
     try:
-        input.id = id  # Ensure the ID in the path matches the request
+        input.topup_id = id  # Ensure the ID in the path matches the request
         with REQUEST_DURATION.labels(method, endpoint).time():
             response = await topup_service.update_topup(input)
             status = 'success' if not isinstance(response, ErrorResponse) else 'error'

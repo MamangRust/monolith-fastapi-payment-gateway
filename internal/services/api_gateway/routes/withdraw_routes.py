@@ -22,7 +22,7 @@ async def get_withdraws(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred: {e.message} - {e.details}",
+            detail=f"An error occurred: ",
         )
 
 
@@ -39,7 +39,7 @@ async def get_withdraw(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving withdraw {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving withdraw {id}: ",
         )
 
 
@@ -56,7 +56,7 @@ async def get_withdraw_user(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving withdraw for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving withdraw for user {user_id}: ",
         )
 
 
@@ -73,7 +73,7 @@ async def get_withdraw_users(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while retrieving withdraws for user {user_id}: {e.message} - {e.details}",
+            detail=f"An error occurred while retrieving withdraws for user {user_id}: ",
         )
 
 
@@ -82,7 +82,6 @@ async def create_withdraw(
     input: CreateWithdrawRequest,
     token: str = Depends(token_security),
 ):
-    headers = await get_auth_headers(token)
     try:
         response = await withdraw_client.post(
             "/withdraw", json=input.model_dump(), headers={"Authorization": f"Bearer {token}"}
@@ -91,7 +90,7 @@ async def create_withdraw(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while creating withdraw: {e.message} - {e.details}",
+            detail=f"An error occurred while creating withdraw: ",
         )
 
 
@@ -109,7 +108,7 @@ async def update_withdraw(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while updating withdraw {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while updating withdraw {id}: ",
         )
 
 
@@ -126,5 +125,5 @@ async def delete_withdraw(
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred while deleting withdraw {id}: {e.message} - {e.details}",
+            detail=f"An error occurred while deleting withdraw {id}: ",
         )

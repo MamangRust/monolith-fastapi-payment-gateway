@@ -50,7 +50,7 @@ class SaldoRepository(ISaldoRepository):
         """
         result = await self.session.execute(
             update(Saldo)
-            .where(Saldo.id == input.id)
+            .where(Saldo.user_id == input.user_id)
             .values(
                 balance=input.balance,
                 updated_at=datetime.utcnow()

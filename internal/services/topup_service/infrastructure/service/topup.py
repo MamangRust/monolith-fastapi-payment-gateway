@@ -37,7 +37,10 @@ class TopupService(ITopupService):
         self.saldo_repository = saldo_repository
         self.topup_repository = topup_repository
         self.kafka_manager = kafka_manager,
-        self.otel_manager = OpenTelemetryManager
+        self.otel_manager = otel_manager
+
+
+    
 
     async def get_topups(
         self,
@@ -46,7 +49,7 @@ class TopupService(ITopupService):
             try:
                 # Fetch all topups
                 topups = await self.topup_repository.find_all()
-                topup_responses = [TopupResponse.from_dtos(topup) for topup in topups]
+                topup_responses = TopupResponse.from_dtos(topups)
 
                 logger.info("Successfully retrieved topups", count=len(topup_responses))
                 span.set_attribute("topup_count", len(topup_responses))
