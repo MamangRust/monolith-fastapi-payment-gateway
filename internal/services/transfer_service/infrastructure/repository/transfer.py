@@ -20,11 +20,15 @@ from lib.model.transfer import Transfer
 
 
 class TransferRepository(ITransferRepository):
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+
     async def find_all(self) -> List[TransferRecordDTO]:
         """
         Retrieve all transfer records.
         """
-        result = await session.execute(select(Transfer))
+        result = await self.session.execute(select(Transfer))
         transfers = result.scalars().all()
         return [TransferRecordDTO.from_orm(transfer) for transfer in transfers]
 
@@ -32,7 +36,7 @@ class TransferRepository(ITransferRepository):
         """
         Find a transfer record by its ID.
         """
-        result = await session.execute(select(Transfer).filter(Transfer.id == id))
+        result = await self.session.execute(select(Transfer).filter(Transfer.id == id))
         transfer = result.scalars().first()
         return TransferRecordDTO.from_orm(transfer) if transfer else None
 
@@ -40,7 +44,7 @@ class TransferRepository(ITransferRepository):
         """
         Find all transfer records associated with a given user ID.
         """
-        result = await session.execute(
+        result = await self.session.execute(
             select(Transfer).filter(Transfer.user_id == user_id)
         )
         transfers = result.scalars().all()
@@ -54,7 +58,7 @@ class TransferRepository(ITransferRepository):
         """
         Find a single transfer record associated with a given user ID.
         """
-        result = await session.execute(
+        result = await self.session.execute(
             select(Transfer).filter(Transfer.user_id == user_id)
         )
         transfer = result.scalars().first()
@@ -71,16 +75,16 @@ class TransferRepository(ITransferRepository):
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
-        session.add(new_transfer)
-        await session.commit()
-        await session.refresh(new_transfer)
+        self.session.add(new_transfer)
+        await self.session.commit()
+        await self.session.refresh(new_transfer)
         return TransferRecordDTO.from_orm(new_transfer)
 
     async def update(self, input: UpdateTransferRequest) -> TransferRecordDTO:
         """
         Update an existing transfer record based on the given input.
         """
-        result = await session.execute(
+        result = await self.session.execute(
             update(Transfer)
             .where(Transfer.id == input.id)
             .values(
@@ -93,8 +97,8 @@ class TransferRepository(ITransferRepository):
         )
         updated_transfer = result.scalars().first()
         if updated_transfer:
-            await session.commit()
-            await session.refresh(updated_transfer)
+            await self.session.commit()
+            await self.session.refresh(updated_transfer)
             return TransferRecordDTO.from_orm(updated_transfer)
         else:
             raise ValueError("Transfer record not found")
@@ -105,7 +109,7 @@ class TransferRepository(ITransferRepository):
         """
         Update the amount of an existing transfer record.
         """
-        result = await session.execute(
+        result = await self.session.execute(
             update(Transfer)
             .where(Transfer.id == input.id)
             .values(amount=input.amount, updated_at=datetime.utcnow())
@@ -113,8 +117,8 @@ class TransferRepository(ITransferRepository):
         )
         updated_transfer = result.scalars().first()
         if updated_transfer:
-            await session.commit()
-            await session.refresh(updated_transfer)
+            await self.session.commit()
+            await self.session.refresh(updated_transfer)
             return TransferRecordDTO.from_orm(updated_transfer)
         else:
             raise ValueError("Transfer record not found")
@@ -123,7 +127,7 @@ class TransferRepository(ITransferRepository):
         """
         Delete a transfer record by its ID.
         """
-        result = await session.execute(delete(Transfer).where(Transfer.id == id))
+        result = await self.session.execute(delete(Transfer).where(Transfer.id == id))
         if result.rowcount == 0:
             raise ValueError("Transfer record not found")
-        await session.commit()
+        await self.session.commit()

@@ -9,42 +9,42 @@ class IUserRepository(abc.ABC):
     """
 
     @abc.abstractmethod
-    async def create_user(self, session: Any,user: CreateUserRequest) -> UserRecordDTO:
+    async def create_user(self, user: CreateUserRequest) -> UserRecordDTO:
         """
         Add a new user record to the repository.
         """
         pass
 
     @abc.abstractmethod
-    async def find_all(self, session: Any) -> List[UserRecordDTO]:
+    async def find_all(self) -> List[UserRecordDTO]:
         """
         Find all user records in the repository.
         """
         pass
 
     @abc.abstractmethod
-    def find_by_email_exists(self, session: Any,email: str) -> bool:
+    def find_by_email_exists(self, email: str) -> bool:
         """
         Check if a user with the given email exists in the repository.
         """
         pass
 
     @abc.abstractmethod
-    async def find_by_email(self, session: Any,email: str) -> Optional[UserRecordDTO]:
+    async def find_by_email(self, email: str) -> Optional[UserRecordDTO]:
         """
         Find a user by their email.
         """
         pass
 
     @abc.abstractmethod
-    async def find_by_id(self, session: Any,user_id: int) -> Optional[UserRecordDTO]:
+    async def find_by_id(self, user_id: int) -> Optional[UserRecordDTO]:
         """
         Find a user by their ID.
         """
         pass
 
     @abc.abstractmethod
-    async def update_user(self, session: Any,user: UpdateUserRequest) -> UserRecordDTO:
+    async def update_user(self, user: UpdateUserRequest) -> UserRecordDTO:
         """
         Update an existing user record.
         """

@@ -3,7 +3,7 @@ from typing import Union, List, Optional
 from prometheus_client import Counter, Histogram
 
 from domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
-from domain.dtos.response.api import ApiResponse
+from domain.dtos.response.api import ApiResponse, ErrorResponse
 from domain.service.withdraw import IWithdrawService
 from domain.dtos.response.withdraw import WithdrawResponse
 from infrastructure.service.withdraw import WithdrawResponse
@@ -16,7 +16,7 @@ REQUEST_DURATION = Histogram('withdraw_service_request_duration_seconds', 'Durat
 
 router = APIRouter()
 
-@router.get("/", response_model=ApiResponse[List[WithdrawResponse]])
+@router.get("", response_model=ApiResponse[List[WithdrawResponse]])
 async def get_withdraws(
     withdraw_service: IWithdrawService = Depends(get_withdraw_service),
     token: str = Depends(token_security),

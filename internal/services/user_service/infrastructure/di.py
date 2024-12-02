@@ -9,8 +9,9 @@ from lib.config.base import BaseAppSettings
 
 
 from domain.repository.user import IUserRepository
-from domain.service.user import IUserService
+from infrastructure.repository.user import UserRepository
 
+from domain.service.user import IUserService
 from infrastructure.service.user import UserService
 
 
@@ -51,7 +52,6 @@ class Container:
         return UserService(
             repository=user_repo,
             hashing=Hashing(),
-            jwt_config=self.get_jwt(),
             otel_manager=self.get_otel()
         )
 

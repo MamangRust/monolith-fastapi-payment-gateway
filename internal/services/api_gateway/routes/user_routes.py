@@ -13,14 +13,14 @@ async def get_users(
     token: str = Depends(token_security),
 ):
     try:
-        response = await user_service_client.get(
+        response = await user_client.get(
             "/users", headers={"Authorization": f"Bearer {token}"}
         )
         return response
     except HttpClientError as e:
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred: {e.message} - {e.details}",
+            detail=f"An error occurred: ",
         )
 
 
@@ -30,7 +30,7 @@ async def get_user_by_id(
     token: str = Depends(token_security),
 ):
     try:
-        response = await user_service_client.get(
+        response = await user_client.get(
             f"/users/{user_id}", headers={"Authorization": f"Bearer {token}"}
         )
         return response
@@ -47,7 +47,7 @@ async def create_user(
     token: str = Depends(token_security),
 ):
     try:
-        response = await user_service_client.post(
+        response = await user_client.post(
             "/users", json=user_request.model_dump(), headers={"Authorization": f"Bearer {token}"}
         )
         return response
@@ -65,7 +65,7 @@ async def update_user(
     token: str = Depends(token_security),
 ):
     try:
-        response = await user_service_client.put(
+        response = await user_client.put(
             f"/users/{user_id}",
             json=user_request.model_dump(),
             headers={"Authorization": f"Bearer {token}"},
@@ -84,7 +84,7 @@ async def delete_user(
     token: str = Depends(token_security),
 ):
     try:
-        response = await user_service_client.delete(
+        response = await user_client.delete(
             f"/users/{user_id}", headers={"Authorization": f"Bearer {token}"}
         )
         return response

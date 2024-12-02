@@ -15,9 +15,9 @@ from domain.dtos.response.api import (
     ApiResponse,
     ErrorResponse,
 )
-from lib.utils.errors import AppError
+from lib.utils.errors import AppError, ValidationError
 from domain.dtos.response.user import UserResponse
-
+from lib.utils.random_vcc import random_vcc
 
 from lib.otel.otel_config import OpenTelemetryManager
 
@@ -94,14 +94,21 @@ class UserService(IUserService):
                         message="Email already exists.",
                     )
 
+                if input.password != input.confirm_password:
+                    raise ValidationError("Passwords do not match")
+
+
                 hashed_password = await self.hashing.hash_password(input.password)
                 input.password = hashed_password
+                input.noc_transfer = random_vcc()
 
-                user = await self.repository.create_user(input)
+                user = await self.repository.create_user(user=input)
+
+
                 return ApiResponse(
                     status="success",
                     message="User created successfully.",
-                    data=UserResponse.from_dtos(user),
+                    data=UserResponse.from_dto(user),
                 )
             except Exception as e:
                 logger.error("Error creating user", error=str(e))
@@ -115,9 +122,9 @@ class UserService(IUserService):
         self, input: UpdateUserRequest
     ) -> Union[ApiResponse[UserResponse], ErrorResponse]:
         with self.otel_manager.start_trace("Update User") as span:
-            span.set_attribute("user_id", input.user_id)
+            span.set_attribute("user_id", input.id)
             try:
-                user = await self.repository.find_by_id(input.user_id)
+                user = await self.repository.find_by_id(input.id)
                 if not user:
                     span.set_attribute("error", "User not found")
                     return ErrorResponse(
@@ -125,14 +132,18 @@ class UserService(IUserService):
                         message="User with the specified ID does not exist.",
                     )
 
-                updated_user = await self.repository.update_user(input)
+                hashed_password = await self.hashing.hash_password(input.password)
+
+                input.password = hashed_password
+
+                updated_user = await self.repository.update_user(user=input)
                 return ApiResponse(
                     status="success",
                     message="User updated successfully.",
                     data=UserResponse.from_dto(updated_user),
                 )
             except Exception as e:
-                logger.error("Error updating user", user_id=input.user_id, error=str(e))
+                logger.error("Error updating user", user_id=input.id, error=str(e))
                 span.record_exception(e)
                 return ErrorResponse(
                     status="error",
@@ -143,7 +154,7 @@ class UserService(IUserService):
         with self.otel_manager.start_trace("Delete User") as span:
             span.set_attribute("user_id", id)
             try:
-                user = await self.repository.find_by_id(id)
+                user = await self.repository.find_by_id(user_id=id)
                 if not user:
                     span.set_attribute("error", "User not found")
                     return ErrorResponse(
@@ -151,7 +162,7 @@ class UserService(IUserService):
                         message="User with the specified ID does not exist.",
                     )
 
-                await self.repository.delete_user(id)
+                await self.repository.delete_user(user_id=id)
                 return ApiResponse(
                     status="success",
                     message="User deleted successfully.",

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from typing import Union, List
 from prometheus_client import Counter, Histogram
 from domain.dtos.request.user import CreateUserRequest, UpdateUserRequest
-from domain.dtos.response.api import ApiResponse
+from domain.dtos.response.api import ApiResponse, ErrorResponse
 from domain.service.user import IUserService
 from domain.dtos.response.user import UserResponse
 from infrastructure.service.user import UserService

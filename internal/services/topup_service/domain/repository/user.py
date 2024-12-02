@@ -9,7 +9,7 @@ class IUserRepository(abc.ABC):
     """
 
     @abc.abstractmethod
-    async def find_by_id(self, session: Any,user_id: int) -> Optional[UserRecordDTO]:
+    async def find_by_id(self, user_id: int) -> Optional[UserRecordDTO]:
         """
         Find a user by their ID.
         """

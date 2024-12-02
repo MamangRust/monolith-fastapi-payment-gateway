@@ -3,7 +3,7 @@ from typing import Union, List, Optional
 from prometheus_client import Counter, Histogram
 
 from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoRequest
-from domain.dtos.response.api import ApiResponse
+from domain.dtos.response.api import ApiResponse, ErrorResponse
 from domain.service.saldo import ISaldoService
 from domain.dtos.response.saldo import SaldoResponse
 
@@ -19,7 +19,7 @@ router = APIRouter()
 REQUEST_COUNT = Counter('saldo_service_requests_count', 'Total number of requests received', ['method', 'endpoint', 'status'])
 REQUEST_DURATION = Histogram('saldo_service_request_duration_seconds', 'Duration of request handling', ['method', 'endpoint'])
 
-@router.get("/", response_model=ApiResponse[List[SaldoResponse]])
+@router.get("", response_model=ApiResponse[List[SaldoResponse]])
 async def get_saldos(
     token: str = Depends(token_security),
     saldo_service: ISaldoService = Depends(get_saldo_service),
@@ -29,7 +29,7 @@ async def get_saldos(
     endpoint = '/'
     try:
         with REQUEST_DURATION.labels(method, endpoint).time():
-            response = await transfer_service.get_transfers()
+            response = await saldo_service.get_saldos()
             status = 'success' if not isinstance(response, ErrorResponse) else 'error'
             REQUEST_COUNT.labels(method, endpoint, status).inc()
             if status == 'error':

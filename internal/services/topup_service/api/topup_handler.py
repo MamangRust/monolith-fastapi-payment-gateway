@@ -4,7 +4,7 @@ from prometheus_client import Counter, Histogram
 
 from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
 
-from domain.dtos.response.api import ApiResponse
+from domain.dtos.response.api import ApiResponse, ErrorResponse
 from domain.service.topup import ITopupService
 from domain.dtos.response.topup import TopupResponse
 from infrastructure.service.topup import TopupService
@@ -19,7 +19,7 @@ REQUEST_COUNT = Counter('topup_service_requests_count', 'Total number of request
 REQUEST_DURATION = Histogram('topup_service_request_duration_seconds', 'Duration of request handling', ['method', 'endpoint'])
 
 
-@router.get("/", response_model=ApiResponse[List[TopupResponse]])
+@router.get("", response_model=ApiResponse[List[TopupResponse]])
 async def get_topups(topup_service: ITopupService = Depends(get_topup_service), token: str =Depends(token_security)):
     """Retrieve a list of all topups."""
     method = 'GET'

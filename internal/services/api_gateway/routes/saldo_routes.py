@@ -20,9 +20,10 @@ async def get_saldos(
         )
         return response
     except HttpClientError as e:
+        print("error : {}".format(e))
         raise HTTPException(
             status_code=e.status_code or 500,
-            detail=f"An error occurred: {e.message} - {e.details}",
+            detail=f"An error occurred:",
         )
 
 

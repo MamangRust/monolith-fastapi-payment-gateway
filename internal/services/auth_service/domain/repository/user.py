@@ -10,7 +10,7 @@ class IUserRepository(abc.ABC):
     """
 
     @abc.abstractmethod
-    async def create_user(self, session: Any,user: CreateUserRequest) -> UserRecordDTO:
+    async def create_user(self, user: CreateUserRequest) -> UserRecordDTO:
         """
         Add a new user record to the repository.
         """
@@ -18,14 +18,14 @@ class IUserRepository(abc.ABC):
 
 
     @abc.abstractmethod
-    def find_by_email_exists(self, session: Any,email: str) -> bool:
+    def find_by_email_exists(self, email: str) -> bool:
         """
         Check if a user with the given email exists in the repository.
         """
         pass
 
     @abc.abstractmethod
-    async def find_by_email(self, session: Any,email: str) -> Optional[UserRecordDTO]:
+    async def find_by_email(self, email: str) -> Optional[UserRecordDTO]:
         """
         Find a user by their email.
         """

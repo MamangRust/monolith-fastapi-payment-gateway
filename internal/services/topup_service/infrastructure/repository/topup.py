@@ -13,7 +13,10 @@ from lib.model.topup import Topup
 
 
 class TopupRepository(ITopupRepository):
-    async def find_all(self, session: AsyncSession) -> List[TopupRecordDTO]:
+    def __init__(self, session: AsyncSession):
+        self.session = session
+
+    async def find_all(self) -> List[TopupRecordDTO]:
         """
         Retrieve all topup records.
         """
@@ -21,7 +24,7 @@ class TopupRepository(ITopupRepository):
         topups = result.scalars().all()
         return [TopupRecordDTO.from_orm(topup) for topup in topups]
 
-    async def find_by_id(self, session: AsyncSession, id: int) -> Optional[TopupRecordDTO]:
+    async def find_by_id(self,  id: int) -> Optional[TopupRecordDTO]:
         """
         Find a topup record by its ID.
         """

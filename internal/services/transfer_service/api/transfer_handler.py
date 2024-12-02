@@ -3,7 +3,7 @@ from typing import Union, List, Optional
 from prometheus_client import Counter, Histogram
 
 from domain.dtos.request.transfer import CreateTransferRequest, UpdateTransferRequest
-from domain.dtos.response.api import ApiResponse
+from domain.dtos.response.api import ApiResponse, ErrorResponse
 from domain.service.transfer import ITransferService
 from domain.dtos.response.transfer import TransferResponse
 from infrastructure.service.transfer import TransferService
@@ -16,7 +16,7 @@ REQUEST_DURATION = Histogram('transfer_service_request_duration_seconds', 'Durat
 
 router = APIRouter()
 
-@router.get("/", response_model=ApiResponse[List[TransferResponse]])
+@router.get("", response_model=ApiResponse[List[TransferResponse]])
 async def get_transfers(
     transfer_service: ITransferService = Depends(get_transfer_service),
     token: str = Depends(token_security),

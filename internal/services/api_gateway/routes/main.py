@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from routes import auth_routes,  saldo_routes, topup_routes, transfer_routes, withdraw_routes
+from routes import auth_routes,  saldo_routes, topup_routes, transfer_routes, withdraw_routes, user_routes
 
 router = APIRouter()
 
@@ -8,6 +8,11 @@ router = APIRouter()
 
 router.include_router(
     router=auth_routes.router, tags=["Authentication"], prefix="/auth"
+)
+
+
+router.include_router(
+    router=user_routes.router, tags=["User"], prefix="/user"
 )
 
 router.include_router(
