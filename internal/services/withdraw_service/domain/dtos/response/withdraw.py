@@ -7,7 +7,7 @@ class WithdrawResponse(BaseModel):
     withdraw_id: int
     user_id: int
     withdraw_amount: int
-    withdtaw_time: datetime
+    withdraw_time: datetime
 
     @staticmethod
     def from_dto(dto: WithdrawRecordDTO) -> 'WithdrawResponse':
@@ -18,7 +18,7 @@ class WithdrawResponse(BaseModel):
             withdraw_id=dto.withdraw_id,
             user_id=dto.user_id,
             withdraw_amount=dto.withdraw_amount,
-            withdtaw_time=dto.withdtaw_time
+            withdraw_time=dto.withdraw_time
         )
 
     @staticmethod

@@ -18,26 +18,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 6,
-  "links": [
-    {
-      "asDropdown": false,
-      "icon": "external link",
-      "includeVars": false,
-      "keepTime": false,
-      "tags": [],
-      "targetBlank": false,
-      "title": "Withdraw Service",
-      "tooltip": "",
-      "type": "dashboards",
-      "url": ""
-    }
-  ],
+  "id": 5,
+  "links": [],
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -118,7 +105,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "be5l3wx8pygaof"
+            "uid": "ee5rgjjnev75sa"
           },
           "editorMode": "code",
           "expr": "rate(python_gc_objects_collected_total{application=\"Withdraw Service Application\"}[1m])",
@@ -133,7 +120,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -225,7 +212,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -317,7 +304,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -409,7 +396,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -501,7 +488,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -589,6 +576,190 @@
       ],
       "title": "Process Start Time - Withdraw Service",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ee5rgjjnev75sa"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 24
+      },
+      "id": 7,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(withdraw_service_requests_count_total{application=\"Withdraw Service Application\"}[1m])",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request Count Total",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "ee5rgjjnev75sa"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 24
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "11.3.0+security-01",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "rate(withdraw_service_request_duration_seconds_created{application=\"Withdraw Service Application\"}[1m])",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request Duration Second",
+      "type": "timeseries"
     }
   ],
   "preload": false,
@@ -604,7 +775,7 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Withdraw Service",
-  "uid": "fe5oa8es6pv5sa",
-  "version": 10,
+  "uid": "ae5ri57ylxq80d",
+  "version": 7,
   "weekStart": ""
 }

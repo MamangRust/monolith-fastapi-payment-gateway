@@ -8,7 +8,7 @@ class CreateWithdrawRequest(BaseModel):
 
     @model_validator(mode="before")
     def validate_withdraw_amount(cls, values):
-        if values['withdraw_time'] >= 50000:
+        if values['withdraw_amount'] < 50000:
             raise ValueError('Withdraw amount must be less than 50000')
         return values
 
@@ -21,6 +21,6 @@ class UpdateWithdrawRequest(BaseModel):
 
     @model_validator(mode="before")
     def validate_withdraw_amount(cls, values):
-        if values['withdraw_time'] >= 50000:
+        if values['withdraw_amount'] < 50000:
             raise ValueError('Withdraw amount must be less than 50000')
         return values

@@ -1,0 +1,3 @@
+## Folder Lib
+
+The `lib` folder serves as the core library for the application, providing essential modules and utilities that enable the system's functionality. It typically includes reusable components, configurations, and services that support the application’s operations, such as database models, logging, security, and integrations with external systems. This modular structure allows for clean separation of concerns, making the codebase easier to maintain and extend.

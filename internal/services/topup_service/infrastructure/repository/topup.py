@@ -32,7 +32,7 @@ class TopupRepository(ITopupRepository):
         """
         Find a topup record by its ID.
         """
-        result = await self.session.execute(select(Topup).filter(Topup.id == id))
+        result = await self.session.execute(select(Topup).filter(Topup.topup_id == id))
         topup = result.scalars().first()
         return TopupRecordDTO.from_orm(topup) if topup else None
 
@@ -65,6 +65,7 @@ class TopupRepository(ITopupRepository):
             user_id=input.user_id,
             topup_amount=input.topup_amount,
             topup_method=input.topup_method,
+            topup_time=datetime.utcnow(),
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -85,6 +86,7 @@ class TopupRepository(ITopupRepository):
                 user_id=input.user_id,
                 topup_amount=input.topup_amount,
                 topup_method=input.topup_method,
+                topup_time=datetime.utcnow(),
                 updated_at=datetime.utcnow(),
             )
             .returning(Topup)
@@ -104,7 +106,7 @@ class TopupRepository(ITopupRepository):
         result = await self.session.execute(
             update(Topup)
             .where(Topup.topup_id == input.topup_id)
-            .values(amount=input.amount, updated_at=datetime.utcnow())
+            .values(topup_amount=input.topup_amount, updated_at=datetime.utcnow())
             .returning(Topup)
         )
         updated_topup = result.scalars().first()
@@ -119,7 +121,7 @@ class TopupRepository(ITopupRepository):
         """
         Delete a topup record by its ID.
         """
-        result = await self.session.execute(delete(Topup).where(Topup.id == id))
+        result = await self.session.execute(delete(Topup).where(Topup.topup_id == id))
         if result.rowcount == 0:
             raise ValueError("Topup record not found")
         await self.session.commit()

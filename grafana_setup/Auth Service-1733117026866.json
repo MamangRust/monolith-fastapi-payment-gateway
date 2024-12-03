@@ -18,10 +18,10 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 3,
   "links": [
     {
-      "asDropdown": true,
+      "asDropdown": false,
       "icon": "external link",
       "includeVars": false,
       "keepTime": false,
@@ -37,7 +37,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -129,7 +129,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -221,7 +221,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -313,7 +313,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -405,7 +405,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -497,7 +497,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -589,7 +589,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -634,7 +634,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -680,7 +681,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "be5l3wx8pygaof"
+        "uid": "ee5rgjjnev75sa"
       },
       "fieldConfig": {
         "defaults": {
@@ -725,7 +726,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -760,7 +762,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "be5l3wx8pygaof"
+            "uid": "ee5rgjjnev75sa"
           },
           "editorMode": "code",
           "expr": "rate(register_request_count_created{application=\"Auth Service Application\"}[1m])",
@@ -786,7 +788,7 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Auth Service",
-  "uid": "ae5nii61ibn5se",
-  "version": 24,
+  "uid": "be5rgtwayj668d",
+  "version": 5,
   "weekStart": ""
 }

@@ -1,3 +1,4 @@
+import json
 from typing import List, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
@@ -18,6 +19,8 @@ from domain.dtos.request.transfer import (
     UpdateTransferRequest,
     UpdateTransferAmountRequest,
 )
+
+from domain.dtos.request.saldo import UpdateSaldoBalanceRequest
 
 from domain.dtos.response.api import (
     ApiResponse,
@@ -189,6 +192,8 @@ class TransferService(ITransferService):
             span.set_attribute("transfer_to", input.transfer_to)
             span.set_attribute("transfer_amount", input.transfer_amount)
 
+            producer = None
+
             try:
                 # Check sender user
                 sender = await self.user_repository.find_by_id(input.transfer_from)
@@ -219,7 +224,7 @@ class TransferService(ITransferService):
                     )
 
                 sender_balance = sender_saldo.total_balance - input.transfer_amount
-                request_sender_balance = UpdateSaldoBalance(
+                request_sender_balance = UpdateSaldoBalanceRequest(
                     user_id=input.transfer_from,
                     total_balance=sender_balance,
                 )
@@ -248,7 +253,7 @@ class TransferService(ITransferService):
                     )
 
                 receiver_balance = receiver_saldo.total_balance + input.transfer_amount
-                request_receiver_balance = UpdateSaldoBalance(
+                request_receiver_balance = UpdateSaldoBalanceRequest(
                     user_id=input.transfer_to,
                     total_balance=receiver_balance,
                 )
@@ -274,13 +279,13 @@ class TransferService(ITransferService):
                     "receiver_email": receiver.email,
                     "subject": "Transfer Successful",
                     "body": (
-                        f"Hi {sender.name}, you have successfully transferred {input.transfer_amount} to {receiver.name}. "
+                        f"Hi {sender.firstname} {sender.lastname}, you have successfully transferred {input.transfer_amount} to {receiver.firstname} {receiver.lastname}. "
                         f"Your new balance is {sender_balance}. \n\n"
-                        f"Hi {receiver.name}, you have received {input.transfer_amount} from {sender.name}. "
+                        f"Hi {receiver.firstname} {receiver.lastname}, you have received {input.transfer_amount} from {sender.firstname} {sender.lastname}. "
                         f"Your new balance is {receiver_balance}."
                     ),
                 }
-                await producer.send_and_wait(
+                await producer.send(
                     topic="email-service-topic-transfer",
                     value=json.dumps(email_message).encode("utf-8"),
                 )
@@ -306,6 +311,9 @@ class TransferService(ITransferService):
                 return ErrorResponse(
                     status="error", message="Failed to create transfer"
                 )
+            finally:
+                if producer:
+                    await producer.stop()
 
     async def update_transfer(
         self, input: UpdateTransferRequest
@@ -347,7 +355,7 @@ class TransferService(ITransferService):
                     span.set_attribute("error", "Insufficient balance")
                     raise ValidationError("Insufficient balance for sender")
 
-                update_sender_balance = UpdateSaldoBalance(
+                update_sender_balance = UpdateSaldoBalanceRequest(
                     user_id=transfer.transfer_from,
                     total_balance=new_sender_balance,
                 )
@@ -375,7 +383,7 @@ class TransferService(ITransferService):
 
                 new_receiver_balance = receiver_saldo.total_balance + amount_difference
 
-                update_receiver_balance = UpdateSaldoBalance(
+                update_receiver_balance = UpdateSaldoBalanceRequest(
                     user_id=transfer.transfer_to,
                     total_balance=new_receiver_balance,
                 )
@@ -388,7 +396,7 @@ class TransferService(ITransferService):
                     span.record_exception(db_err)
 
                     # Rollback sender's saldo update if receiver's update fails
-                    rollback_sender_balance = UpdateSaldoBalance(
+                    rollback_sender_balance = UpdateSaldoBalanceRequest(
                         user_id=transfer.transfer_from,
                         total_balance=sender_saldo.total_balance,
                     )

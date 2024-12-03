@@ -1,4 +1,4 @@
-from sqlalchemy import select, insert, update, delete
+from sqlalchemy import select, insert, update, delete, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy.future import select
@@ -11,7 +11,7 @@ from domain.dtos.request.transfer import (
     UpdateTransferAmountRequest,
 )
 from domain.dtos.record.transfer import (
-    TransferRecordDTO,
+    TransferRecordDTO
 )
 from domain.repository.transfer import (
     ITransferRepository,

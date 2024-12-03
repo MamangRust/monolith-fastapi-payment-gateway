@@ -7,6 +7,7 @@ from typing import List, Optional
 from domain.dtos.request.saldo import (
     CreateSaldoRequest,
     UpdateSaldoBalanceRequest,
+    UpdateSaldoWithdraw
 )
 from domain.dtos.record.saldo import SaldoRecordDTO
 from domain.repository.saldo import ISaldoRepository
@@ -59,3 +60,29 @@ class SaldoRepository(ISaldoRepository):
             return SaldoRecordDTO.from_orm(updated_saldo)
         else:
             raise ValueError("Saldo record not found")
+
+    async def update_saldo_withdraw(self, input: UpdateSaldoWithdraw) -> Optional[SaldoRecordDTO]:
+        result = await self.session.execute(
+            select(Saldo).filter(Saldo.user_id == input.user_id)
+        )
+        saldo_record = result.scalars().first()
+
+        if not saldo_record:
+            raise ValueError("Saldo not found")
+
+        # Check if withdraw_amount is provided and sufficient balance exists
+        if input.withdraw_amount is not None:
+            current_balance = saldo_record.total_balance
+
+            if current_balance < input.withdraw_amount:
+                raise ValueError("Insufficient balance")
+
+            # Update the fields
+            saldo_record.total_balance -= input.withdraw_amount
+            saldo_record.withdraw_amount = input.withdraw_amount
+            saldo_record.withdraw_time = input.withdraw_time
+
+        await self.session.commit()
+        await self.session.refresh(saldo_record)
+
+        return SaldoRecordDTO.from_orm(saldo_record)

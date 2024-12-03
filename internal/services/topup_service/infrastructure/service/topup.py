@@ -9,7 +9,9 @@ from domain.service.topup import ITopupService
 
 from domain.repository.saldo import ISaldoRepository
 
-from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest
+from domain.dtos.request.topup import CreateTopupRequest, UpdateTopupRequest, UpdateTopupAmount
+from domain.dtos.request.saldo import UpdateSaldoBalanceRequest
+
 from domain.dtos.response.api import ApiResponse, ErrorResponse
 from domain.dtos.response.topup import TopupResponse
 
@@ -36,7 +38,7 @@ class TopupService(ITopupService):
         self.user_repository = user_repository
         self.saldo_repository = saldo_repository
         self.topup_repository = topup_repository
-        self.kafka_manager = kafka_manager,
+        self.kafka_manager = kafka_manager
         self.otel_manager = otel_manager
 
 
@@ -90,7 +92,7 @@ class TopupService(ITopupService):
                 return ApiResponse(
                     status="success",
                     message="Topup retrieved successfully",
-                    data=TopupResponse.from_entity(topup),
+                    data=TopupResponse.from_dto(topup),
                 )
             except NotFoundError as e:
                 span.record_exception(e)
@@ -131,7 +133,7 @@ class TopupService(ITopupService):
                         data=None,
                     )
 
-                topup_response = [TopupResponse.from_dtos(topup) for topup in topups]
+                topup_response = TopupResponse.from_dtos(topups)
                 logger.info(f"Successfully retrieved topups for user with id {user_id}")
                 span.set_attribute("topup_count", len(topup_response))
 
@@ -206,7 +208,7 @@ class TopupService(ITopupService):
     async def create_topup(self, input: CreateTopupRequest) -> Union[ApiResponse[TopupResponse], ErrorResponse]:
         with self.otel_manager.start_trace("Create Topup") as span:
             span.set_attribute("user_id", input.user_id)
-
+            producer = None
             try:
                 # Check if the user exists
                 user = await self.user_repository.find_by_id(input.user_id)
@@ -236,7 +238,7 @@ class TopupService(ITopupService):
                 try:
                     if saldo:
                         new_balance = saldo.total_balance + topup.topup_amount
-                        update_request = UpdateSaldoBalance(user_id=input.user_id, total_balance=new_balance)
+                        update_request = UpdateSaldoBalanceRequest(user_id=input.user_id, total_balance=new_balance)
                         await self.saldo_repository.update_balance(update_request)
                         logger.info(f"Saldo updated successfully for user {input.user_id}. New balance: {new_balance}")
                         span.set_attribute("new_balance", new_balance)
@@ -262,11 +264,11 @@ class TopupService(ITopupService):
                         "subject": "Top-Up Successful",
                         "body": f"Hi {user.firstname} {user.lastname}, your top-up of {topup.topup_amount} has been successfully added. Your new balance is {new_balance if saldo else topup.topup_amount}."
                     }
-                    await producer.send_and_wait(
+                    await producer.send(
                         topic="email-service-topic-topup",
                         value=json.dumps(email_message).encode("utf-8")
                     )
-                    await producer.stop()
+                    
                     logger.info(f"Email notification sent to Kafka for user {input.user_id} on topic 'email-service-topic-topup'.")
                     span.set_attribute("email_notification_sent", True)
                 except Exception as kafka_err:
@@ -288,7 +290,7 @@ class TopupService(ITopupService):
                 span.record_exception(e)
                 return ErrorResponse(
                     status="error",
-                    message=str(e)
+                    message="An error occurred while creating topup. Please try again later."
                 )
 
             except Exception as e:
@@ -298,6 +300,10 @@ class TopupService(ITopupService):
                     status="error",
                     message="An unexpected error occurred while creating topup"
                 )
+            finally:
+                if producer:
+                    await producer.stop()
+
 
 
     async def update_topup(self, input: UpdateTopupRequest) -> Union[ApiResponse[Optional[TopupResponse]], ErrorResponse]:
@@ -337,7 +343,7 @@ class TopupService(ITopupService):
                 span.set_attribute("topup_difference", topup_difference)
 
                 # Update topup amount
-                await self.topup_repository.update_amount(input.topup_id, input.topup_amount)
+                await self.topup_repository.update_amount(input=UpdateTopupAmount(topup_id=input.topup_id, topup_amount=input.topup_amount))
 
                 # Update saldo
                 saldo = await self.saldo_repository.find_by_user_id(input.user_id)
@@ -347,7 +353,9 @@ class TopupService(ITopupService):
                     raise NotFoundError(f"Saldo for user {input.user_id} not found")
 
                 new_balance = saldo.total_balance + topup_difference
-                await self.saldo_repository.update_balance(input.user_id, new_balance)
+                saldo_input = UpdateSaldoBalanceRequest(user_id=input.user_id, total_balance=new_balance)
+
+                await self.saldo_repository.update_balance(saldo_input)
 
                 logger.info("Saldo updated", user_id=input.user_id, new_balance=new_balance)
                 span.set_attribute("new_balance", new_balance)

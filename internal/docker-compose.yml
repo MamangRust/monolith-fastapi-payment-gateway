@@ -8,7 +8,6 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
 
-  # Kafka service
   kafka:
     image: bitnami/kafka:latest
     ports:
@@ -19,8 +18,26 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
       - KAFKA_LISTENERS=PLAINTEXT://:9092
       - ALLOW_PLAINTEXT_LISTENER=yes
+      
+      # New configurations to address message size and other potential issues
+      - KAFKA_MAX_REQUEST_SIZE=104857600  # 100 MB default max request size
+      - KAFKA_MESSAGE_MAX_BYTES=104857600  # 100 MB max message size
+      - KAFKA_MAX_PARTITION_FETCH_BYTES=104857600  # 100 MB max fetch size
+      
+      # Additional recommended Kafka configurations
+      - KAFKA_NUM_NETWORK_THREADS=3
+      - KAFKA_NUM_IO_THREADS=8
+      - KAFKA_SOCKET_SEND_BUFFER_BYTES=102400
+      - KAFKA_SOCKET_RECEIVE_BUFFER_BYTES=102400
+      - KAFKA_SOCKET_REQUEST_MAX_BYTES=104857600
+
     depends_on:
       - zookeeper
+    command: >
+      bash -c "curl -o /tmp/wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh &&
+      chmod +x /tmp/wait-for-it.sh &&
+      /tmp/wait-for-it.sh zookeeper:2181 -- /opt/bitnami/scripts/kafka/run.sh"
+
 
   # Prometheus service
   prometheus:
@@ -276,7 +293,7 @@ services:
       - JWT_SECRET_KEY=hello
       - JWT_TOKEN_EXPIRATION_MINUTES=10080
       - JWT_ALGORITHM=HS256
-      - SMTP_USER=magnolia.schmitt33@ethereal.email
-      - SMTP_PASSWORD=Rc98mbg22kNYwUqEuK
+      - SMTP_USER=
+      - SMTP_PASSWORD=
 
   

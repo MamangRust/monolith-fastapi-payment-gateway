@@ -7,9 +7,10 @@ class CreateTransferRequest(BaseModel):
 
     @model_validator(mode="before")
     def validate_transfer_amount(cls, values):
-        if values['transfer_amount'] >= 50000:
-            raise ValueError('Transfer amount must be less than 50000')
+        if values['transfer_amount'] < 50000:
+            raise ValueError('Transfer amount must be at least 50000')
         return values
+
 
 
 class UpdateTransferRequest(BaseModel):
@@ -20,7 +21,7 @@ class UpdateTransferRequest(BaseModel):
 
     @model_validator(mode="before")
     def validate_transfer_amount(cls, values):
-        if values['transfer_amount'] >= 50000:
+        if values['transfer_amount'] < 50000:
             raise ValueError('Transfer amount must be less than 50000')
         return values
 
@@ -31,6 +32,6 @@ class UpdateTransferAmountRequest(BaseModel):
 
     @model_validator(mode="before")
     def validate_transfer_amount(cls, values):
-        if values['transfer_amount'] >= 50000:
+        if values['transfer_amount'] < 50000:
             raise ValueError('Transfer amount must be less than 50000')
         return values

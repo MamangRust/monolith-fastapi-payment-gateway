@@ -1,7 +1,7 @@
 from typing import List, Optional, Union
 from sqlalchemy.ext.asyncio import AsyncSession
 from structlog import get_logger
-
+from datetime import datetime
 from domain.repository.user import IUserRepository
 
 from domain.repository.withdraw import (
@@ -11,7 +11,7 @@ from domain.service.withdraw import IWithdrawService
 
 from domain.repository.saldo import ISaldoRepository
 
-
+from domain.dtos.request.saldo import UpdateSaldoWithdraw, UpdateSaldoBalanceRequest
 from domain.dtos.request.withdraw import (
     CreateWithdrawRequest,
     UpdateWithdrawRequest,
@@ -61,7 +61,9 @@ class WithdrawService(IWithdrawService):
                 withdraw_responses = WithdrawResponse.from_dtos(withdraws)
 
                 span.set_attribute("total_withdrawals", len(withdraw_responses))
-                logger.info(f"Successfully fetched {len(withdraw_responses)} withdrawals.")
+                logger.info(
+                    f"Successfully fetched {len(withdraw_responses)} withdrawals."
+                )
                 return ApiResponse(
                     status="success",
                     message="Withdrawals retrieved successfully.",
@@ -131,7 +133,9 @@ class WithdrawService(IWithdrawService):
                 # Map withdrawals to response DTOs
                 withdrawal_responses = WithdrawResponse.from_dtos(withdrawals)
 
-                logger.info(f"Successfully retrieved withdrawals for user with ID {user_id}.")
+                logger.info(
+                    f"Successfully retrieved withdrawals for user with ID {user_id}."
+                )
                 span.set_attribute("withdrawals_found", True)
                 span.set_attribute("total_withdrawals", len(withdrawals))
 
@@ -141,7 +145,9 @@ class WithdrawService(IWithdrawService):
                     data=withdrawal_responses,
                 )
             except Exception as e:
-                logger.error(f"Failed to retrieve withdrawals for user with ID {user_id}: {str(e)}")
+                logger.error(
+                    f"Failed to retrieve withdrawals for user with ID {user_id}: {str(e)}"
+                )
                 span.record_exception(e)
                 span.set_attribute("error", "An unexpected error occurred.")
                 return ErrorResponse(
@@ -167,11 +173,15 @@ class WithdrawService(IWithdrawService):
                 if not withdrawal:
                     logger.info(f"No withdrawal found for user with ID {user_id}.")
                     span.set_attribute("withdrawal_found", False)
-                    raise NotFoundError(f"Withdrawal for user with ID {user_id} not found.")
+                    raise NotFoundError(
+                        f"Withdrawal for user with ID {user_id} not found."
+                    )
 
                 # Map withdrawal to response DTO
                 withdrawal_response = WithdrawResponse.from_dto(withdrawal)
-                logger.info(f"Successfully retrieved withdrawal for user with ID {user_id}.")
+                logger.info(
+                    f"Successfully retrieved withdrawal for user with ID {user_id}."
+                )
                 span.set_attribute("withdrawal_found", True)
 
                 return ApiResponse(
@@ -180,7 +190,9 @@ class WithdrawService(IWithdrawService):
                     data=withdrawal_response,
                 )
             except Exception as e:
-                logger.error(f"Failed to retrieve withdrawal for user with ID {user_id}: {str(e)}")
+                logger.error(
+                    f"Failed to retrieve withdrawal for user with ID {user_id}: {str(e)}"
+                )
                 span.record_exception(e)
                 span.set_attribute("error", "An unexpected error occurred.")
                 return ErrorResponse(
@@ -219,10 +231,12 @@ class WithdrawService(IWithdrawService):
                 new_total_balance = saldo.total_balance - input.withdraw_amount
                 try:
                     await self.saldo_repository.update_saldo_withdraw(
-                        user_id=input.user_id,
-                        withdraw_amount=input.withdraw_amount,
-                        withdraw_time=datetime.utcnow(),
-                        total_balance=new_total_balance,
+                        input=UpdateSaldoWithdraw(
+                            user_id=input.user_id,
+                            withdraw_amount=input.withdraw_amount,
+                            withdraw_time=datetime.utcnow(),
+                            total_balance=new_total_balance,
+                        )
                     )
                     logger.info(
                         f"Saldo balance updated for user_id {input.user_id}. "
@@ -239,23 +253,10 @@ class WithdrawService(IWithdrawService):
                 # Create the withdraw record
                 try:
                     withdraw_record = await self.withdraw_repository.create(input)
-                    logger.info(f"Withdraw created successfully for user_id {input.user_id}")
-                    span.set_attribute("withdraw_created", True)
-
-                    # Kirim pesan Kafka untuk memberi tahu layanan lain bahwa penarikan telah dibuat
-                    message = {
-                        "user_id": input.user_id,
-                        "withdraw_amount": input.withdraw_amount,
-                        "new_total_balance": new_total_balance,
-                        "timestamp": datetime.utcnow().isoformat()
-                    }
-                    # Menggunakan self.kafka_manager untuk mengirim pesan
-                    await self.kafka_manager.produce_message(
-                        topic="withdraw-topic",
-                        key=str(input.user_id),
-                        value=message
+                    logger.info(
+                        f"Withdraw created successfully for user_id {input.user_id}"
                     )
-                    logger.info(f"Message sent to Kafka topic 'withdraw-topic' for user_id {input.user_id}")
+                    span.set_attribute("withdraw_created", True)
 
                     return ApiResponse(
                         status="success",
@@ -270,13 +271,15 @@ class WithdrawService(IWithdrawService):
                         status="error", message=f"Failed to create withdraw: {e}"
                     )
             except Exception as e:
-                logger.error(f"Unexpected error while creating withdraw for user_id {input.user_id}: {str(e)}")
+                logger.error(
+                    f"Unexpected error while creating withdraw for user_id {input.user_id}: {str(e)}"
+                )
                 span.record_exception(e)
                 span.set_attribute("error", "An unexpected error occurred.")
                 return ErrorResponse(
-                    status="error", message="An unexpected error occurred. Please try again later."
+                    status="error",
+                    message="An unexpected error occurred. Please try again later.",
                 )
-
 
     async def update_withdraw(
         self, input: UpdateWithdrawRequest
@@ -286,11 +289,15 @@ class WithdrawService(IWithdrawService):
             span.set_attribute("user_id", input.user_id)
             try:
                 # Check if the withdrawal exists
-                withdraw_record = await self.withdraw_repository.find_by_id(input.withdraw_id)
+                withdraw_record = await self.withdraw_repository.find_by_id(
+                    input.withdraw_id
+                )
                 if not withdraw_record:
                     logger.error(f"Withdraw with id {input.withdraw_id} not found")
                     span.set_attribute("withdraw_found", False)
-                    raise NotFoundError(f"Withdraw with id {input.withdraw_id} not found")
+                    raise NotFoundError(
+                        f"Withdraw with id {input.withdraw_id} not found"
+                    )
 
                 # Fetch the user's saldo
                 saldo = await self.saldo_repository.find_by_user_id(input.user_id)
@@ -316,11 +323,11 @@ class WithdrawService(IWithdrawService):
                     updated_withdraw = await self.withdraw_repository.update(input)
                 except Exception as e:
                     # Rollback saldo if the withdrawal update fails
-                    await self.saldo_repository.update_saldo_withdraw(
-                        user_id=input.user_id,
-                        withdraw_amount=None,
-                        withdraw_time=None,
-                        total_balance=saldo.total_balance,
+                    await self.saldo_repository.update_balance(
+                        input=UpdateSaldoBalanceRequest(
+                            user_id=input.user_id,
+                            total_balance=saldo.total_balance,
+                        )
                     )
                     logger.error(
                         f"Rollback: Saldo reverted due to withdraw update failure: {e}"
@@ -334,13 +341,17 @@ class WithdrawService(IWithdrawService):
                 # Update the saldo to reflect the new withdrawal amount
                 try:
                     await self.saldo_repository.update_saldo_withdraw(
-                        user_id=input.user_id,
-                        withdraw_amount=input.withdraw_amount,
-                        withdraw_time=datetime.utcnow(),
-                        total_balance=new_total_balance,
+                        input=UpdateSaldoWithdraw(
+                            user_id=input.user_id,
+                            withdraw_amount=input.withdraw_amount,
+                            withdraw_time=datetime.utcnow(),
+                            total_balance=new_total_balance,
+                        )
                     )
                 except Exception as e:
-                    logger.error(f"Failed to update saldo balance after withdrawal update: {e}")
+                    logger.error(
+                        f"Failed to update saldo balance after withdrawal update: {e}"
+                    )
                     span.record_exception(e)
                     return ErrorResponse(
                         status="error",
@@ -358,7 +369,9 @@ class WithdrawService(IWithdrawService):
                     data=WithdrawResponse.from_dto(updated_withdraw),
                 )
             except Exception as e:
-                logger.error(f"Unexpected error while updating withdraw for withdraw_id {input.withdraw_id}: {str(e)}")
+                logger.error(
+                    f"Unexpected error while updating withdraw for withdraw_id {input.withdraw_id}: {str(e)}"
+                )
                 span.record_exception(e)
                 span.set_attribute("error", "An unexpected error occurred.")
                 return ErrorResponse(
@@ -385,7 +398,9 @@ class WithdrawService(IWithdrawService):
                 except Exception as e:
                     logger.error(f"Error deleting withdraw with id {id}: {e}")
                     span.record_exception(e)
-                    span.set_attribute("error", "Error occurred while deleting withdraw")
+                    span.set_attribute(
+                        "error", "Error occurred while deleting withdraw"
+                    )
                     return ErrorResponse(
                         status="error", message=f"Error deleting withdraw with id {id}"
                     )
@@ -398,10 +413,11 @@ class WithdrawService(IWithdrawService):
                     data=None,
                 )
             except Exception as e:
-                logger.error(f"Unexpected error while deleting withdraw with id {id}: {str(e)}")
+                logger.error(
+                    f"Unexpected error while deleting withdraw with id {id}: {str(e)}"
+                )
                 span.record_exception(e)
                 span.set_attribute("error", "An unexpected error occurred")
                 return ErrorResponse(
-                    status="error",
-                    message=f"Failed to delete withdraw with id {id}"
+                    status="error", message=f"Failed to delete withdraw with id {id}"
                 )

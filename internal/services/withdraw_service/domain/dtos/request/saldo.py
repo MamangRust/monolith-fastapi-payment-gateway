@@ -11,3 +11,10 @@ class CreateSaldoRequest(BaseModel):
 class UpdateSaldoBalanceRequest(BaseModel):
     total_balance: int
     user_id: int
+
+
+class UpdateSaldoWithdraw(BaseModel):
+    user_id: int
+    total_balance: int
+    withdraw_amount: Optional[int] = None
+    withdraw_time: Optional[datetime] = None

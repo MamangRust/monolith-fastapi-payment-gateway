@@ -20,11 +20,15 @@ COPY lib /app/lib
 # Copy seluruh email_service service
 COPY services/email_service /app
 
+# Ensure wait-for-it.sh is executable
+RUN chmod +x /app/wait-for-it.sh
+
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-
 
 EXPOSE 8008
 
 # Command to run the application
+ENTRYPOINT ["bash", "/app/wait-for-it.sh", "kafka:9092", "--"]
+
 CMD ["python", "main.py"]

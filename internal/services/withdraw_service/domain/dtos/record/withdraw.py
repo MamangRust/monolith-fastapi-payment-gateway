@@ -5,7 +5,7 @@ class WithdrawRecordDTO(BaseModel):
     withdraw_id: int
     user_id: int
     withdraw_amount: int
-    withdtaw_time: datetime
+    withdraw_time: datetime
     created_at: datetime
     updated_at: datetime
 

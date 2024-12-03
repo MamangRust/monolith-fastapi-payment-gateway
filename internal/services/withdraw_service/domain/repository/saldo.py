@@ -1,7 +1,7 @@
 import abc
 from typing import List, Optional, Any
 from domain.dtos.record.saldo import SaldoRecordDTO
-from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoBalanceRequest
+from domain.dtos.request.saldo import CreateSaldoRequest, UpdateSaldoBalanceRequest, UpdateSaldoWithdraw
 
 
 class ISaldoRepository(abc.ABC):
@@ -28,4 +28,8 @@ class ISaldoRepository(abc.ABC):
         """
         Update the balance of an existing saldo record.
         """
+        pass
+
+    @abc.abstractmethod
+    async def update_saldo_withdraw(self, input: UpdateSaldoWithdraw) -> Optional[SaldoRecordDTO]:
         pass

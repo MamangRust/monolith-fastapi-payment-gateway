@@ -2,7 +2,7 @@ from sqlalchemy import select, insert, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from sqlalchemy.future import select
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List, Optional
 
 from domain.dtos.request.withdraw import CreateWithdrawRequest, UpdateWithdrawRequest
@@ -57,12 +57,18 @@ class WithdrawRepository(IWithdrawRepository):
         """
         Create a new withdrawal record from the given input.
         """
+        withdraw_time = input.withdraw_time.replace(tzinfo=None) if input.withdraw_time.tzinfo else input.withdraw_time
+
+        # Create `created_at` and `updated_at` as offset-naive datetime objects
+        created_at = datetime.now().replace(tzinfo=None)
+        updated_at = datetime.now().replace(tzinfo=None)
+
         new_withdrawal = Withdraw(
             user_id=input.user_id,
             withdraw_amount=input.withdraw_amount,
-            withdraw_time=input.withdraw_time,
-            created_at=datetime.utcnow(),
-            updated_at=datetime.utcnow(),
+            withdraw_time=withdraw_time,
+            created_at=created_at,
+            updated_at=updated_at,
         )
         self.session.add(new_withdrawal)
         await self.session.commit()
@@ -73,13 +79,15 @@ class WithdrawRepository(IWithdrawRepository):
         """
         Update an existing withdrawal record based on the given input.
         """
+        withdraw_time = input.withdraw_time.replace(tzinfo=None) if input.withdraw_time.tzinfo else input.withdraw_time
+
         result = await self.session.execute(
             update(Withdraw)
             .where(Withdraw.withdraw_id == input.withdraw_id)
             .values(
                 user_id=input.user_id,
                 withdraw_amount=input.withdraw_amount,
-                withdraw_time=input.withdraw_time,
+                withdraw_time=withdraw_time,
                 updated_at=datetime.utcnow(),
             )
             .returning(Withdraw)

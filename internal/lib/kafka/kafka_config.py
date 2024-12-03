@@ -9,7 +9,11 @@ class KafkaManager:
         self.bootstrap_servers = bootstrap_servers
 
     async def get_producer(self):
-        producer = AIOKafkaProducer(bootstrap_servers=self.bootstrap_servers)
+        producer = AIOKafkaProducer(
+            bootstrap_servers=self.bootstrap_servers,
+            max_request_size=104857600,
+            max_batch_size=104857600,
+        )
         await producer.start()
         return producer
 
@@ -19,7 +23,8 @@ class KafkaManager:
             group_id=group_id,
             bootstrap_servers=self.bootstrap_servers,
             auto_offset_reset="earliest",
-            enable_auto_commit=True
+            enable_auto_commit=True,
+            max_partition_fetch_bytes=209715200
         )
         await consumer.start()
         return consumer

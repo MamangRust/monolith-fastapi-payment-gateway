@@ -7,8 +7,8 @@ class TransferResponse(BaseModel):
     transfer_id: int
     transfer_from: int
     transfer_to: int
-    tranfer_amount: int
-    tranfer_time: datetime
+    transfer_amount: int
+    transfer_time: datetime
 
     @staticmethod
     def from_dto(dto: TransferRecordDTO) -> 'TransferResponse':
@@ -19,8 +19,8 @@ class TransferResponse(BaseModel):
             transfer_id=dto.transfer_id,
             transfer_from=dto.transfer_from,
             transfer_to=dto.transfer_to,
-            tranfer_amount=dto.tranfer_amount,
-            tranfer_time=dto.tranfer_time
+            transfer_amount=dto.transfer_amount,
+            transfer_time=dto.transfer_time
         )
 
     @staticmethod
